@@ -1,0 +1,53 @@
+name: es_english
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flash_card: ^0.0.5
+  get: ^4.7.2
+  flutter_screenutil: ^5.9.3
+  google_fonts: ^6.3.0
+  http: ^1.5.0
+  dash_chat_2: ^0.0.21
+  uuid: ^4.5.1
+  animated_bottom_navigation_bar: ^1.4.0
+  flutter_image_slideshow: ^0.1.6
+  audioplayers: ^6.5.1
+  flutter_svg: ^2.2.0
+  dio: ^5.9.0
+  shared_preferences: ^2.5.3
+  freezed_annotation: 2.4.4
+  json_annotation:  4.9.0
+  get_storage: 2.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_gen_runner: 5.8.0
+  build_runner: 2.4.13
+  freezed: 2.5.7
+  json_serializable: 6.8.0
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/animals/
+    - assets/audio/animals/
+    - assets/icons/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.jpg"
