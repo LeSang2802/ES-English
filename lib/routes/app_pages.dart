@@ -8,6 +8,8 @@ import 'package:es_english/pages/progress/progress_binding.dart';
 import 'package:es_english/pages/progress/progress_page.dart';
 import 'package:es_english/pages/reading/reading_binding.dart';
 import 'package:es_english/pages/reading/reading_page.dart';
+import 'package:es_english/pages/register/register_binding.dart';
+import 'package:es_english/pages/register/register_page.dart';
 import 'package:es_english/pages/skill/skill_binding.dart';
 import 'package:es_english/pages/skill/skill_page.dart';
 import 'package:es_english/pages/vocabulary/flash_card/flash_card_page.dart';
@@ -31,6 +33,11 @@ class AppPages {
       name: RouteNames.login,
       page: () => const LoginPage(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: RouteNames.register,
+      page: () => const RegisterPage(),
+      binding: RegisterBinding(),
     ),
     GetPage(
       name: RouteNames.home,

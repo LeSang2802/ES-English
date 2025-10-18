@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../routes/route_name.dart';
 import 'login_controller.dart';
 
 class LoginPage extends StatelessWidget {
@@ -42,7 +43,7 @@ class LoginPage extends StatelessWidget {
 
               // Email
               Text(
-                "Email",
+                "Email or UserName",
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
@@ -139,7 +140,9 @@ class LoginPage extends StatelessWidget {
                 children: [
                   Text("Don't have an account? "),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(RouteNames.register);
+                    },
                     child: Text(
                       "Sign up",
                       style: TextStyle(
@@ -150,6 +153,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ],
               ),
+
 
               SizedBox(height: 40.h),
             ],

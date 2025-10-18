@@ -7,7 +7,7 @@ class Application extends BaseApplication<AppTranslations> {
    Application({super.key})
       : super(
     listPages: AppPages.appPages,
-    initialRoute: RouteNames.home,
+    initialRoute: RouteNames.login,
     translations: AppTranslations(),
   );
 }
