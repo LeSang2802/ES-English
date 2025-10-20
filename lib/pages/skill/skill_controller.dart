@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../models/skill/skill_model.dart';
-import '../../../cores/utils/dummy_util.dart';
+import 'package:es_english/models/skill/skill_response_model.dart';
+import 'package:es_english/pages/skill/skill_repository.dart';
 
 class SkillController extends GetxController {
-  final skills = <Skill>[].obs;
-  final isLoading = false.obs;
+  final SkillRepository repo = SkillRepository();
+
+  var skills = <SkillResponseModel>[].obs;
+  var isLoading = false.obs;
 
   @override
   void onInit() {
@@ -13,28 +16,34 @@ class SkillController extends GetxController {
   }
 
   Future<void> loadSkills() async {
-    if (isLoading.value) return;
     isLoading.value = true;
-
-    await Future.delayed(const Duration(milliseconds: 500));
-    skills.assignAll(DummyUtil.skills);
-
-    isLoading.value = false;
+    try {
+      skills.value = await repo.getSkills();
+    } catch (e) {
+      print("Error load skills: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+  IconData getIconByIndex(int index) {
+    switch (index) {
+      case 0:
+        return Icons.hearing_rounded; // Listening
+      case 1:
+        return Icons.record_voice_over_rounded; // Speaking
+      case 2:
+        return Icons.menu_book_rounded; // Reading
+      case 3:
+        return Icons.edit_note_rounded; // Writing
+      default:
+        return Icons.school_rounded;
+    }
   }
 
-  // void onSelectSkill(Skill skill) {
-  //   Get.snackbar(
-  //     "Skill Selected",
-  //     "ID: ${skill.id} — ${skill.name}",
-  //     snackPosition: SnackPosition.BOTTOM,
-  //     duration: const Duration(seconds: 2),
-  //   );
-  // }
-  void onSelectSkill(Skill skill) {
-    // Chuyển sang trang tiếp theo (ví dụ: chọn cấp độ của skill)
+  void onSelectSkill(SkillResponseModel skill) {
     Get.toNamed(
-      '/level',     // Route của màn kế tiếp
-      arguments: skill,    // Truyền toàn Skill (bao gồm id, name, ...)
+      '/level',
+      arguments: skill,
     );
   }
 }

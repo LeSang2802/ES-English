@@ -408,9 +408,7 @@ class DummyUtil {
     Skill(id: "1", name: "Listening", icon: "ear", progress: 0.75),
     Skill(id: "2", name: "Speaking", icon: "mic", progress: 0.45),
     Skill(id: "3", name: "Reading", icon: "book", progress: 0.60),
-    Skill(id: "4", name: "Writing", icon: "pencil", progress: 0.40),
-    Skill(id: "5", name: "Vocabulary", icon: "cards", progress: 0.80),
-    Skill(id: "6", name: "Test", icon: "clipboard", progress: 0.25),
+    Skill(id: "4", name: "Writing", icon: "pencil", progress: 0.40)
   ];
 
   static final List<String> homeSliderImages = [
