@@ -1,42 +1,48 @@
 import 'package:get/get.dart';
-import '../../cores/utils/dummy_util.dart';
-import '../../models/level/level_model.dart';
+import 'package:es_english/models/level/level_response_model.dart';
+import 'package:es_english/pages/level/level_repository.dart';
+import 'package:es_english/models/skill/skill_response_model.dart';
 
 class LevelController extends GetxController {
-  final levels = <Level>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxBool isLoadingMore = false.obs;
+  final LevelRepository repo = LevelRepository();
+
+  var levels = <LevelResponseModel>[].obs;
+  var isLoading = false.obs;
+
+  late final String skillId;
+  late final String skillName;
+
 
   @override
   void onInit() {
+    final arg = Get.arguments;
+    skillId = arg?.id ?? arg['skill_id'] ?? '';
+    skillName = arg?.name ?? arg['skill_name'] ?? '';
     super.onInit();
     loadLevels();
   }
 
-  /// 🔹 Load danh sách cấp độ (từ DummyUtil)
-  void loadLevels() {
+  Future<void> loadLevels() async {
     isLoading.value = true;
-    Future.delayed(const Duration(milliseconds: 300), () {
-      levels.value = DummyUtil.Levels; // ⚠️ Tạm dùng dữ liệu reading, sau này đổi API
+    try {
+      levels.value = await repo.getLevels(); // backend đã sort theo sort_order
+    } catch (e) {
+      print('Error load levels: $e');
+    } finally {
       isLoading.value = false;
-    });
+    }
   }
 
-  /// 🔹 Refresh danh sách cấp độ
   Future<void> refreshData() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    loadLevels();
+    await loadLevels();
   }
 
-  /// 🔹 Khi chọn cấp độ → điều hướng sang danh sách bài học theo cấp độ
-  void onSelectLevel(Level level) {
-    Get.snackbar(
-      "Chọn cấp độ",
-      "Bạn đã chọn: ${level.title}",
-      snackPosition: SnackPosition.BOTTOM,
-    );
-
-    // TODO: chuyển sang TopicPage hoặc LessonPage
-    // Get.toNamed('/topic', arguments: level);
+  void onSelectLevel(LevelResponseModel level) {
+    Get.toNamed('/topic', arguments: {
+      'skill_id': skillId,
+      'skill_name': skillName,
+      'level_id': level.id,
+      'level_name': level.name,
+    });
   }
 }

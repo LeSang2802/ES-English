@@ -1,9 +1,7 @@
 import '../../models/home/home_continue_model.dart';
 import '../../models/home/home_flashcard_model.dart';
-import '../../models/level/level_model.dart';
 import '../../models/progress/progress_model.dart';
 import '../../models/reading/reading.dart';
-import '../../models/skill/skill_model.dart';
 import '../../models/vocabulary/flash_card/flash_card_model.dart';
 import '../../models/vocabulary/saved_word/saved_word_model.dart';
 import '../../models/vocabulary/vocabulary_model.dart';
@@ -376,24 +374,6 @@ class DummyUtil {
     ),
   ];
 
-  static final List<Level> Levels = [
-    Level(
-      id: "1",
-      title: "Beginner",
-      description: "Dành cho người mới bắt đầu",
-    ),
-    Level(
-      id: "2",
-      title: "Intermediate",
-      description: "Trình độ trung cấp",
-    ),
-    Level(
-      id: "3",
-      title: "Advanced",
-      description: "Nâng cao",
-    ),
-  ];
-
   static final List<SavedWordModel> savedWords = [
     SavedWordModel(id: "1", en: "Friend", vi: "Bạn bè", type: "(n)"),
     SavedWordModel(id: "2", en: "Developer", vi: "Nhà phát triển", type: "(n)"),
@@ -404,12 +384,6 @@ class DummyUtil {
     SavedWordModel(id: "7", en: "Software", vi: "Phần mềm", type: "(n)"),
   ];
 
-  static final List<Skill> skills = [
-    Skill(id: "1", name: "Listening", icon: "ear", progress: 0.75),
-    Skill(id: "2", name: "Speaking", icon: "mic", progress: 0.45),
-    Skill(id: "3", name: "Reading", icon: "book", progress: 0.60),
-    Skill(id: "4", name: "Writing", icon: "pencil", progress: 0.40)
-  ];
 
   static final List<String> homeSliderImages = [
     'assets/images/animals/bear.jpg',

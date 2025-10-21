@@ -28,5 +28,10 @@ class Vietnamese {
     'logout': 'Đăng xuất',
     'saved_word': 'Từ đã lưu',
     'enter_message': 'Nhập tin nhắn...',
+    'select_level': 'Chọn cấp độ',
+    'no_level': 'Không có cấp độ nào',
+    'for_beginner': 'Cấp độ cơ bản',
+    'for_intermediate': 'Cấp độ trung cấp',
+    'for_advanced': 'Cấp độ nâng cao',
   };
 }

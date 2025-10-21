@@ -27,5 +27,10 @@ class English {
     'logout': 'Logout',
     'saved_word': 'Saved word',
     'enter_message': 'Enter message...',
+    'select_level': 'Select level',
+    'no_level': 'No level',
+    'for_beginner': 'For Beginner',
+    'for_intermediate': 'For Intermediate',
+    'for_advanced': 'For Advanced',
   };
 }

@@ -1,7 +1,6 @@
 import 'package:es_english/pages/level/level_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../cores/constants/colors.dart';
 import '../../cores/constants/dimens.dart';
 import '../../cores/constants/text_styles.dart';
@@ -9,7 +8,7 @@ import '../../cores/widgets/base_app_bar.dart';
 import '../../cores/widgets/base_bottom_nav.dart';
 import '../../cores/widgets/base_page.dart';
 import '../../cores/widgets/refresh_loadmore_widget.dart';
-import '../../models/level/level_model.dart';
+import '../../models/level/level_response_model.dart';
 
 class LevelPage extends StatelessWidget {
   const LevelPage({super.key});
@@ -21,7 +20,7 @@ class LevelPage extends StatelessWidget {
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
-      appBar: BaseAppBar(title: "Chọn cấp độ"),
+      appBar: BaseAppBar(title: "${'select_level'.tr} - ${controller.skillName}"),
       bottomNavigationBar: BaseBottomNav(
         currentIndex: 1,
         onTap: (index) {},
@@ -34,17 +33,45 @@ class LevelPage extends StatelessWidget {
         child: const Icon(Icons.search, color: AppColors.primary, size: 28),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Obx(() => RefreshLoadMoreWidget<Level>(
-        items: controller.levels,
-        onRefresh: controller.refreshData,
-        isLoadingMore: controller.isLoadingMore.value,
-        onTapItem: (_, level) => controller.onSelectLevel(level),
-        itemBuilder: (context, index, level) => _buildLevelCard(context, level),
-      )),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final items = controller.levels.toList();
+
+        if (items.isEmpty) {
+          return  Center(child: Text('no_level'.tr));
+        }
+
+        return RefreshLoadMoreWidget<LevelResponseModel>(
+          items: items,
+          onRefresh: controller.refreshData,
+          isLoadingMore: false,
+          onTapItem: (_, level) => controller.onSelectLevel(level),
+          itemBuilder: (context, index, level) =>
+              _buildLevelCard(context, level),
+        );
+      }),
     );
   }
 
-  Widget _buildLevelCard(BuildContext context, Level level) {
+  Widget _buildLevelCard(BuildContext context, LevelResponseModel level) {
+    String description;
+    switch (level.name?.toLowerCase()) {
+      case 'beginner':
+        description = 'for_beginner'.tr;
+        break;
+      case 'intermediate':
+        description = 'for_intermediate'.tr;
+        break;
+      case 'advanced':
+        description = 'for_advanced'.tr;
+        break;
+      default:
+        description = '';
+    }
+
     return Container(
       margin: EdgeInsets.only(top: MarginDimens.normal),
       padding: EdgeInsets.all(MarginDimens.large),
@@ -68,7 +95,7 @@ class LevelPage extends StatelessWidget {
               color: AppColors.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(RadiusDimens.normal),
             ),
-            child: Icon(Icons.auto_stories_rounded,
+            child: const Icon(Icons.auto_stories_rounded,
                 color: AppColors.primary, size: 28),
           ),
           SizedBox(width: MarginDimens.large),
@@ -76,10 +103,10 @@ class LevelPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(level.title, style: TextStyles.mediumBold),
+                Text(level.name ?? '-', style: TextStyles.mediumBold),
                 SizedBox(height: MarginDimens.small),
                 Text(
-                  level.description,
+                  description,
                   style: TextStyles.medium.copyWith(color: Colors.grey),
                 ),
               ],
