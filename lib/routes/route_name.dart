@@ -12,4 +12,5 @@ class RouteNames {
   static const String reading = '/reading';
   static const String level = '/level';
   static const String chatbot = '/chatbot';
+  static const String topic = '/topic';
 }

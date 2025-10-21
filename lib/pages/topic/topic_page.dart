@@ -1,4 +1,4 @@
-import 'package:es_english/pages/level/level_controller.dart';
+import 'package:es_english/pages/topic/topic_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../cores/constants/colors.dart';
@@ -7,60 +7,52 @@ import '../../cores/constants/text_styles.dart';
 import '../../cores/widgets/base_app_bar.dart';
 import '../../cores/widgets/base_page.dart';
 import '../../cores/widgets/refresh_loadmore_widget.dart';
-import '../../models/level/level_response_model.dart';
+import '../../models/topic/topic_response_model.dart';
 
-class LevelPage extends StatelessWidget {
-  const LevelPage({super.key});
+class TopicPage extends StatelessWidget {
+  const TopicPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LevelController());
+    final controller = Get.put(TopicController());
 
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
-      appBar: BaseAppBar(title: "${controller.skillName}"),
+      appBar: BaseAppBar(
+        title:
+        "${controller.skillName} - ${controller.levelName}",
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final items = controller.levels.toList();
+        final items = controller.topics.toList();
 
         if (items.isEmpty) {
-          return  Center(child: Text('no_level'.tr));
+          return Center(child: Text('no_topic'.tr));
         }
 
-        return RefreshLoadMoreWidget<LevelResponseModel>(
+        return RefreshLoadMoreWidget<TopicResponseModel>(
           items: items,
           onRefresh: controller.refreshData,
           isLoadingMore: false,
-          onTapItem: (_, level) => controller.onSelectLevel(level),
-          itemBuilder: (context, index, level) =>
-              _buildLevelCard(context, level),
+          onTapItem: (_, topic) => controller.onSelectTopic(topic),
+          itemBuilder: (context, index, topic) =>
+              _buildTopicCard(context, topic),
         );
       }),
     );
   }
 
-  Widget _buildLevelCard(BuildContext context, LevelResponseModel level) {
-    String description;
-    switch (level.name?.toLowerCase()) {
-      case 'beginner':
-        description = 'for_beginner'.tr;
-        break;
-      case 'intermediate':
-        description = 'for_intermediate'.tr;
-        break;
-      case 'advanced':
-        description = 'for_advanced'.tr;
-        break;
-      default:
-        description = '';
-    }
-
+  Widget _buildTopicCard(BuildContext context, TopicResponseModel topic) {
     return Container(
-      margin: EdgeInsets.only(top: MarginDimens.normal),
+      margin: EdgeInsets.only(
+        top: MarginDimens.normal,
+        left: MarginDimens.large,
+        right: MarginDimens.large,
+      ),
       padding: EdgeInsets.all(MarginDimens.large),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -82,21 +74,17 @@ class LevelPage extends StatelessWidget {
               color: AppColors.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(RadiusDimens.normal),
             ),
-            child: const Icon(Icons.auto_stories_rounded,
-                color: AppColors.primary, size: 28),
+            child: const Icon(
+              Icons.auto_stories_rounded,
+              color: AppColors.primary,
+              size: 28,
+            ),
           ),
           SizedBox(width: MarginDimens.large),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(level.name ?? '-', style: TextStyles.mediumBold),
-                SizedBox(height: MarginDimens.small),
-                Text(
-                  description,
-                  style: TextStyles.medium.copyWith(color: Colors.grey),
-                ),
-              ],
+            child: Text(
+              topic.title ?? '-',
+              style: TextStyles.mediumBold,
             ),
           ),
           const Icon(Icons.chevron_right, color: Colors.grey),

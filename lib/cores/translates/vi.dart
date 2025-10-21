@@ -33,5 +33,6 @@ class Vietnamese {
     'for_beginner': 'Cấp độ cơ bản',
     'for_intermediate': 'Cấp độ trung cấp',
     'for_advanced': 'Cấp độ nâng cao',
+    'no_topic': 'Không tìm thấy chủ đề nào',
   };
 }

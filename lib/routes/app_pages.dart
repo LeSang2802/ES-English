@@ -12,6 +12,8 @@ import 'package:es_english/pages/register/register_binding.dart';
 import 'package:es_english/pages/register/register_page.dart';
 import 'package:es_english/pages/skill/skill_binding.dart';
 import 'package:es_english/pages/skill/skill_page.dart';
+import 'package:es_english/pages/topic/topic_binding.dart';
+import 'package:es_english/pages/topic/topic_page.dart';
 import 'package:es_english/pages/vocabulary/flash_card/flash_card_page.dart';
 import 'package:es_english/pages/vocabulary/saved_word/saved_word_binding.dart';
 import 'package:es_english/routes/route_name.dart';
@@ -87,6 +89,11 @@ class AppPages {
     GetPage(
       name: RouteNames.chatbot,
       page: () => ChatPage(),
+    ),
+    GetPage(
+      name: RouteNames.topic,
+      page: () => const TopicPage(),
+      binding: TopicBinding(),
     ),
   ];
 }

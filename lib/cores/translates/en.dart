@@ -32,5 +32,6 @@ class English {
     'for_beginner': 'For Beginner',
     'for_intermediate': 'For Intermediate',
     'for_advanced': 'For Advanced',
+    'no_topic': 'No topic found',
   };
 }
