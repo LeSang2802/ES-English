@@ -12,13 +12,11 @@ import '../../cores/widgets/base_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
-class HomePage extends StatelessWidget {
+class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeController());
-
     return BasePage(
       isLoading: false.obs,
       isNestedScroll: false,

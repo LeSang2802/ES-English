@@ -9,13 +9,11 @@ import 'package:es_english/cores/widgets/refresh_loadmore_grid_widget.dart';
 import 'package:es_english/models/skill/skill_response_model.dart';
 import 'skill_controller.dart';
 
-class SkillPage extends StatelessWidget {
+class SkillPage extends GetView<SkillController> {
   const SkillPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SkillController());
-
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,

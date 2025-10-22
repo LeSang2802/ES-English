@@ -9,28 +9,20 @@ import '../../cores/widgets/base_page.dart';
 import '../../cores/widgets/refresh_loadmore_widget.dart';
 import '../../models/level/level_response_model.dart';
 
-class LevelPage extends StatelessWidget {
+class LevelPage extends GetView<LevelController> {
   const LevelPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LevelController());
-
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
       appBar: BaseAppBar(title: "${controller.skillName}"),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         final items = controller.levels.toList();
-
         if (items.isEmpty) {
-          return  Center(child: Text('no_level'.tr));
+          return Center(child: Text('no_level'.tr));
         }
-
         return RefreshLoadMoreWidget<LevelResponseModel>(
           items: items,
           onRefresh: controller.refreshData,

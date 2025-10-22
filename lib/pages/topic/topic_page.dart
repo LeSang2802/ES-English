@@ -9,13 +9,11 @@ import '../../cores/widgets/base_page.dart';
 import '../../cores/widgets/refresh_loadmore_widget.dart';
 import '../../models/topic/topic_response_model.dart';
 
-class TopicPage extends StatelessWidget {
+class TopicPage extends GetView<TopicController> {
   const TopicPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TopicController());
-
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
@@ -24,16 +22,10 @@ class TopicPage extends StatelessWidget {
         "${controller.skillName} - ${controller.levelName}",
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         final items = controller.topics.toList();
-
         if (items.isEmpty) {
           return Center(child: Text('no_topic'.tr));
         }
-
         return RefreshLoadMoreWidget<TopicResponseModel>(
           items: items,
           onRefresh: controller.refreshData,
