@@ -1,29 +1,25 @@
+import 'package:es_english/pages/vocabulary/vocabulary_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../cores/constants/colors.dart';
+import '../../../cores/constants/dimens.dart';
 import '../../../cores/constants/text_styles.dart';
 import '../../../cores/widgets/base_app_bar.dart';
 import '../../../cores/widgets/base_page.dart';
-import '../../../models/vocabulary/vocabulary_model.dart';
-import 'vocabulary_controller.dart';
+import '../../../models/topic/topic_response_model.dart';
 
-class VocabularyPage extends StatelessWidget {
+class VocabularyPage extends GetView<VocabularyController> {
   const VocabularyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(VocabularyController());
-
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
       backgroundColor: BgColors.main,
       appBar: BaseAppBar(title: 'vocabulary'.tr),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
+        final topics = controller.topics.toList();
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -31,8 +27,10 @@ class VocabularyPage extends StatelessWidget {
             const SizedBox(height: 20),
             Text('choose_topic'.tr, style: TextStyles.mediumBold),
             const SizedBox(height: 12),
-            ...controller.vocabularies.map(
-                  (vocab) => _buildVocabularyCard(context, vocab, controller),
+            if (topics.isEmpty)
+              Center(child: Text('Không có chủ đề nào.')),
+            ...topics.map(
+                  (topic) => _buildTopicCard(context, topic, controller),
             ),
           ],
         );
@@ -59,7 +57,7 @@ class VocabularyPage extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.list_alt, color: Colors.black87),
+            const Icon(Icons.bookmark, color: Colors.black87),
             const SizedBox(width: 12),
             Expanded(
               child: Text('saved_word'.tr, style: TextStyles.mediumBold),
@@ -71,21 +69,14 @@ class VocabularyPage extends StatelessWidget {
     );
   }
 
-  /// 🔹 Card từng chủ đề
-  Widget _buildVocabularyCard(
-      BuildContext context, Vocabulary vocab, VocabularyController controller) {
-    final isSelected = controller.selectedId.value == vocab.id;
-
+  /// 🔹 Card từng chủ đề flashcard
+  Widget _buildTopicCard(
+      BuildContext context, TopicResponseModel topic, VocabularyController controller) {
     return GestureDetector(
-      // onTap: () => controller.select(vocab),
-      onTap: () {
-        controller.select(vocab);
-        Get.toNamed('/flashCard');
-      },
-
+      onTap: () => controller.onSelectTopic(topic),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -98,6 +89,7 @@ class VocabularyPage extends StatelessWidget {
           ],
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: 60,
@@ -105,23 +97,28 @@ class VocabularyPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
-                image: vocab.imageUrl != null
-                    ? DecorationImage(
-                  image: AssetImage(vocab.imageUrl!),
-                  fit: BoxFit.cover,
-                )
-                    : null,
               ),
+              child: const Icon(Icons.auto_stories_rounded,
+                  color: AppColors.primary, size: 28),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: Text(
-                vocab.name,
-                style: TextStyles.mediumBold.copyWith(color: TextColors.main),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    topic.title ?? '-',
+                    style: TextStyles.mediumBold,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    topic.description ?? '',
+                    style: TextStyles.small.copyWith(color: Colors.grey[700]),
+                  ),
+                ],
               ),
             ),
-            if (isSelected)
-              const Icon(Icons.check, color: AppColors.primary, size: 24),
+            const Icon(Icons.chevron_right, color: Colors.grey),
           ],
         ),
       ),

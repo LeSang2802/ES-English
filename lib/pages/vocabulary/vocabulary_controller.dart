@@ -1,36 +1,38 @@
 import 'package:get/get.dart';
-import '../../../cores/utils/dummy_util.dart';
-import '../../../models/vocabulary/vocabulary_model.dart';
+import 'package:es_english/models/topic/topic_response_model.dart';
+import 'package:es_english/pages/vocabulary/vocabulary_repository.dart';
 
 class VocabularyController extends GetxController {
-  final vocabularies = <Vocabulary>[].obs;
-  final isLoading = false.obs;
-  final selectedId = RxnString();
+  final VocabularyRepository repo = VocabularyRepository();
+
+  var topics = <TopicResponseModel>[].obs;
+  var isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadVocabularies();
+    loadTopics();
   }
 
-  void loadVocabularies() {
+  Future<void> loadTopics() async {
     isLoading.value = true;
-    Future.delayed(const Duration(milliseconds: 300), () {
-      vocabularies.value = DummyUtil.vocabulariesList;
+    try {
+      topics.value = await repo.getFlashcardTopics();
+    } catch (e) {
+      print("Error load flashcard topics: $e");
+    } finally {
       isLoading.value = false;
-    });
+    }
   }
-
-  // void select(Vocabulary item) {
-  //   selectedId.value = item.id;
-  // }
-  void select(Vocabulary item) {
-    selectedId.value = item.id;
-    Get.toNamed('/flashCard');
-  }
-
 
   void goToSavedWords() {
     Get.toNamed('/savedWord');
+  }
+
+  void onSelectTopic(TopicResponseModel topic) {
+    Get.toNamed('/flashCard', arguments: {
+      'topic_id': topic.id,
+      'topic_title': topic.title,
+    });
   }
 }

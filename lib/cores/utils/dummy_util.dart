@@ -7,88 +7,88 @@ import '../../models/vocabulary/saved_word/saved_word_model.dart';
 import '../../models/vocabulary/vocabulary_model.dart';
 
 class DummyUtil {
-  static List<FlashCardModel> flashCards = [
-    FlashCardModel(
-      id: "1",
-      en: "Dog",
-      vi: "Con chó",
-      type: "n",
-      imageUrl: "assets/images/animals/dog.jpg",
-      audioUrl: "assets/audio/animals/dog.mp3",
-    ),
-    FlashCardModel(
-      id: "2",
-      en: "Cat",
-      vi: "Con mèo",
-      type: "n",
-      imageUrl: "assets/images/animals/cat.jpg",
-      audioUrl: "assets/audio/animals/cat.mp3",
-    ),
-    FlashCardModel(
-      id: "3",
-      en: "Elephant",
-      vi: "Con voi",
-      type: "n",
-      imageUrl: "assets/images/animals/elephant.jpg",
-      audioUrl: "assets/audio/animals/elephant.mp3",
-    ),
-    FlashCardModel(
-      id: "4",
-      en: "Giraffe",
-      vi: "Con hươu cao cổ",
-      type: "n",
-      imageUrl: "assets/images/animals/giraffe.jpg",
-      audioUrl: "assets/audio/animals/giraffe.mp3",
-    ),
-    FlashCardModel(
-      id: "5",
-      en: "Tiger",
-      vi: "Con hổ",
-      type: "n",
-      imageUrl: "assets/images/animals/tiger.jpg",
-      audioUrl: "assets/audio/animals/tiger.mp3",
-    ),
-    FlashCardModel(
-      id: "6",
-      en: "Monkey",
-      vi: "Con khỉ",
-      type: "n",
-      imageUrl: "assets/images/animals/monkey.jpg",
-      audioUrl: "assets/audio/animals/monkey.mp3",
-    ),
-    FlashCardModel(
-      id: "7",
-      en: "Horse",
-      vi: "Con ngựa",
-      type: "n",
-      imageUrl: "assets/images/animals/horse.jpg",
-      audioUrl: "assets/audio/animals/horse.mp3",
-    ),
-    FlashCardModel(
-      id: "8",
-      en: "Rabbit",
-      vi: "Con thỏ",
-      type: "n",
-      imageUrl: "assets/images/animals/rabbit.jpg",
-      audioUrl: "assets/audio/animals/rabbit.mp3",
-    ),
-    FlashCardModel(
-      id: "9",
-      en: "Bear",
-      vi: "Con gấu",
-      type: "n",
-      imageUrl: "assets/images/animals/bear.jpg",
-      audioUrl: "assets/audio/animals/bear.mp3",
-    ),
-    FlashCardModel(
-      id: "10",
-      en: "Fox",
-      vi: "Con cáo",
-      type: "n",
-      imageUrl: "assets/images/animals/fox.jpg",
-      audioUrl: "assets/audio/animals/fox.mp3",
-    ),
-  ];
+  // static List<FlashCardModel> flashCards = [
+  //   FlashCardModel(
+  //     id: "1",
+  //     en: "Dog",
+  //     vi: "Con chó",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/dog.jpg",
+  //     audioUrl: "assets/audio/animals/dog.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "2",
+  //     en: "Cat",
+  //     vi: "Con mèo",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/cat.jpg",
+  //     audioUrl: "assets/audio/animals/cat.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "3",
+  //     en: "Elephant",
+  //     vi: "Con voi",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/elephant.jpg",
+  //     audioUrl: "assets/audio/animals/elephant.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "4",
+  //     en: "Giraffe",
+  //     vi: "Con hươu cao cổ",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/giraffe.jpg",
+  //     audioUrl: "assets/audio/animals/giraffe.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "5",
+  //     en: "Tiger",
+  //     vi: "Con hổ",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/tiger.jpg",
+  //     audioUrl: "assets/audio/animals/tiger.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "6",
+  //     en: "Monkey",
+  //     vi: "Con khỉ",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/monkey.jpg",
+  //     audioUrl: "assets/audio/animals/monkey.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "7",
+  //     en: "Horse",
+  //     vi: "Con ngựa",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/horse.jpg",
+  //     audioUrl: "assets/audio/animals/horse.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "8",
+  //     en: "Rabbit",
+  //     vi: "Con thỏ",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/rabbit.jpg",
+  //     audioUrl: "assets/audio/animals/rabbit.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "9",
+  //     en: "Bear",
+  //     vi: "Con gấu",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/bear.jpg",
+  //     audioUrl: "assets/audio/animals/bear.mp3",
+  //   ),
+  //   FlashCardModel(
+  //     id: "10",
+  //     en: "Fox",
+  //     vi: "Con cáo",
+  //     type: "n",
+  //     imageUrl: "assets/images/animals/fox.jpg",
+  //     audioUrl: "assets/audio/animals/fox.mp3",
+  //   ),
+  // ];
 
   // static List<FlashCardModel> flashCards = [
   //   FlashCardModel(
@@ -374,15 +374,15 @@ class DummyUtil {
     ),
   ];
 
-  static final List<SavedWordModel> savedWords = [
-    SavedWordModel(id: "1", en: "Friend", vi: "Bạn bè", type: "(n)"),
-    SavedWordModel(id: "2", en: "Developer", vi: "Nhà phát triển", type: "(n)"),
-    SavedWordModel(id: "3", en: "Run", vi: "Chạy", type: "(v)"),
-    SavedWordModel(id: "4", en: "Seminar", vi: "Hội thảo", type: "(n)"),
-    SavedWordModel(id: "5", en: "Miss", vi: "Cô / nhớ", type: "(n)/(v)"),
-    SavedWordModel(id: "6", en: "Tester", vi: "Người thử nghiệm", type: "(n)"),
-    SavedWordModel(id: "7", en: "Software", vi: "Phần mềm", type: "(n)"),
-  ];
+  // static final List<SavedWordModel> savedWords = [
+  //   SavedWordModel(id: "1", en: "Friend", vi: "Bạn bè", type: "(n)"),
+  //   SavedWordModel(id: "2", en: "Developer", vi: "Nhà phát triển", type: "(n)"),
+  //   SavedWordModel(id: "3", en: "Run", vi: "Chạy", type: "(v)"),
+  //   SavedWordModel(id: "4", en: "Seminar", vi: "Hội thảo", type: "(n)"),
+  //   SavedWordModel(id: "5", en: "Miss", vi: "Cô / nhớ", type: "(n)/(v)"),
+  //   SavedWordModel(id: "6", en: "Tester", vi: "Người thử nghiệm", type: "(n)"),
+  //   SavedWordModel(id: "7", en: "Software", vi: "Phần mềm", type: "(n)"),
+  // ];
 
 
   static final List<String> homeSliderImages = [

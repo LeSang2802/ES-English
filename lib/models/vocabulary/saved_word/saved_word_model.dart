@@ -1,25 +1,21 @@
-class SavedWordModel {
-  final String id;
-  final String en;
-  final String vi;
-  final String type;
-  final bool isSaved;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  SavedWordModel({
-    required this.id,
-    required this.en,
-    required this.vi,
-    required this.type,
-    this.isSaved = true,
-  });
+part 'saved_word_model.freezed.dart';
+part 'saved_word_model.g.dart';
 
-  SavedWordModel copyWith({bool? isSaved}) {
-    return SavedWordModel(
-      id: id,
-      en: en,
-      vi: vi,
-      type: type,
-      isSaved: isSaved ?? this.isSaved,
-    );
-  }
+@freezed
+class SavedWordModel with _$SavedWordModel {
+  const factory SavedWordModel({
+    @JsonKey(name: '_id') String? id,
+    String? word,
+    String? phonetic,
+    String? part_of_speech,
+    String? meaning_vi,
+    String? audio_url,
+    String? image_url,
+    @Default(true) bool isSaved,
+  }) = _SavedWordModel;
+
+  factory SavedWordModel.fromJson(Map<String, dynamic> json) =>
+      _$SavedWordModelFromJson(json);
 }

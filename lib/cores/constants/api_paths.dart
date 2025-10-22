@@ -10,8 +10,10 @@ class ApiPaths {
   static const String level = "/api/admin/catalog/Levels";
   static const String topic = "/api/admin/catalog/topics";
 
-  /// Vocabulary / Flashcard
-  static const String flashcards = "/api/vocab/flashcards";
+  /// Vocabulary / Flashcard / SaveWord
+  static const String flashcard = "/api/vocab/flashcards";
+  static const String saveWord = "/api/vocab/saved-words";
+  static const String savedWordToggle = "/api/vocab/saved-words/toggle";
 
 
 }

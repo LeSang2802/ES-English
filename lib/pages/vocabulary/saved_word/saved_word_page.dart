@@ -7,23 +7,22 @@ import '../../../cores/widgets/base_page.dart';
 import '../../../models/vocabulary/saved_word/saved_word_model.dart';
 import 'saved_word_controller.dart';
 
-class SavedWordPage extends StatelessWidget {
+class SavedWordPage extends GetView<SavedWordController> {
   const SavedWordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SavedWordController());
-
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
       backgroundColor: BgColors.main,
-      appBar: BaseAppBar(title: "Danh sách từ đã lưu"),
+      appBar: const BaseAppBar(title: "Danh sách từ đã lưu"),
       body: Obx(() {
+        // if (controller.isLoading.value) {
+        //   return const Center(child: CircularProgressIndicator());
+        // }
         if (controller.words.isEmpty) {
-          return const Center(
-            child: Text("Chưa có từ nào được lưu"),
-          );
+          return const Center(child: Text("Chưa có từ nào được lưu"));
         }
 
         return ListView.builder(
@@ -39,7 +38,11 @@ class SavedWordPage extends StatelessWidget {
   }
 
   Widget _buildWordCard(
-      BuildContext context, SavedWordModel word, int index, SavedWordController controller) {
+      BuildContext context,
+      SavedWordModel word,
+      int index,
+      SavedWordController controller,
+      ) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -61,28 +64,25 @@ class SavedWordPage extends StatelessWidget {
             "$index.",
             style: TextStyles.mediumBold.copyWith(color: TextColors.main),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Expanded(
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "${word.en} ",
-                    style: TextStyles.mediumBold.copyWith(color: TextColors.main),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  word.word ?? '',
+                  style: TextStyles.mediumBold.copyWith(
+                    color: TextColors.main,
                   ),
-                  TextSpan(
-                    text: "${word.type} ",
-                    style: TextStyles.medium.copyWith(color: Colors.black87),
-                  ),
-                  TextSpan(
-                    text: word.vi,
-                    style: TextStyles.medium.copyWith(color: Colors.black87),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "${word.part_of_speech != null ? '(${word.part_of_speech}) ' : ''}${word.meaning_vi ?? ''}",
+                  style: TextStyles.medium.copyWith(color: Colors.black87),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 8),
           IconButton(
             onPressed: () => controller.toggleSave(word),
             icon: Icon(

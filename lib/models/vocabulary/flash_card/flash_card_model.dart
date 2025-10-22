@@ -1,58 +1,24 @@
-class FlashCardModel {
-  String? id;
-  String? en;
-  String? vi;
-  String? type;
-  String? imageUrl;
-  String audioUrl;
-  bool isSaved;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  FlashCardModel({
-    this.id,
-    this.en,
-    this.vi,
-    this.type,
-    this.imageUrl,
-    required this.audioUrl,
-    this.isSaved = false,
-  });
+part 'flash_card_model.freezed.dart';
+part 'flash_card_model.g.dart';
+
+@freezed
+class FlashCardModel with _$FlashCardModel {
+  const factory FlashCardModel({
+    @JsonKey(name: '_id') String? id,
+    String? topic_id,
+    String? word,
+    String? phonetic,
+    String? part_of_speech,
+    String? meaning_vi,
+    String? example_en,
+    String? example_vi,
+    String? audio_url,
+    String? image_url,
+    @Default(false) bool isSaved,
+  }) = _FlashCardModel;
+
+  factory FlashCardModel.fromJson(Map<String, dynamic> json) =>
+      _$FlashCardModelFromJson(json);
 }
-
-// class FlashcardModel {
-//   final String id;
-//   final String word;
-//   final String? phonetic;
-//   final String? partOfSpeech;
-//   final String? meaningVi;
-//   final String? exampleEn;
-//   final String? exampleVi;
-//   final String? audioUrl;
-//   final String? imageUrl;
-//
-//   FlashcardModel({
-//     required this.id,
-//     required this.word,
-//     this.phonetic,
-//     this.partOfSpeech,
-//     this.meaningVi,
-//     this.exampleEn,
-//     this.exampleVi,
-//     this.audioUrl,
-//     this.imageUrl,
-//   });
-//
-//   factory FlashcardModel.fromJson(Map<String, dynamic> json) {
-//     return FlashcardModel(
-//       id: json['_id'] ?? '',
-//       word: json['word'] ?? '',
-//       phonetic: json['phonetic'],
-//       partOfSpeech: json['part_of_speech'],
-//       meaningVi: json['meaning_vi'],
-//       exampleEn: json['example_en'],
-//       exampleVi: json['example_vi'],
-//       audioUrl: json['audio_url'],
-//       imageUrl: json['image_url'],
-//     );
-//   }
-// }
-
