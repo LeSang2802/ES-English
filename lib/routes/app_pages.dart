@@ -1,5 +1,7 @@
 import 'package:es_english/pages/account/account_binding.dart';
 import 'package:es_english/pages/account/account_page.dart';
+import 'package:es_english/pages/account/profile/profile_binding.dart';
+import 'package:es_english/pages/account/profile/profile_page.dart';
 import 'package:es_english/pages/home/home_binding.dart';
 import 'package:es_english/pages/home/home_page.dart';
 import 'package:es_english/pages/login/login_binding.dart';
@@ -94,6 +96,11 @@ class AppPages {
       name: RouteNames.topic,
       page: () => const TopicPage(),
       binding: TopicBinding(),
+    ),
+    GetPage(
+      name: RouteNames.profile,
+      page: () => const ProfilePage(),
+      binding: ProfileBinding(),
     ),
   ];
 }

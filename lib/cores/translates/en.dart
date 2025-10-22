@@ -33,5 +33,16 @@ class English {
     'for_intermediate': 'For Intermediate',
     'for_advanced': 'For Advanced',
     'no_topic': 'No topic found',
+    'list_saved_word': 'List saved words',
+    'personal_profile': ' Personal profile',
+    'name': 'Full Name',
+    'age': 'Age',
+    'job': 'Job',
+    'avatar_url': 'Avatar url',
+    'save_change': 'Save changes',
+    'sex': 'Sex',
+    'male': 'Male',
+    'female': 'Female',
+    'other': 'Other',
   };
 }

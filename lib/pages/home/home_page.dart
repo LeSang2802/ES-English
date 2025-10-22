@@ -20,7 +20,7 @@ class HomePage extends GetView<HomeController> {
     return BasePage(
       isLoading: false.obs,
       isNestedScroll: false,
-      appBar: _buildHomeAppBar(context),
+      appBar: _buildHomeAppBar(context, controller),
       bottomNavigationBar: BaseBottomNav(
         currentIndex: 0,
         onTap: (index) {
@@ -75,18 +75,15 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  PreferredSizeWidget _buildHomeAppBar(BuildContext context) {
+  PreferredSizeWidget _buildHomeAppBar(
+      BuildContext context, HomeController c) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(80),
       child: Container(
         padding:
-            const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 16),
+        const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 16),
         decoration: BoxDecoration(
           color: BgColors.appBar,
-          // borderRadius: const BorderRadius.only(
-          //   bottomLeft: Radius.circular(25),
-          //   bottomRight: Radius.circular(25),
-          // ),
           boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.1),
@@ -94,35 +91,56 @@ class HomePage extends GetView<HomeController> {
                 offset: const Offset(0, 3))
           ],
         ),
-        child: Row(
+        child: Obx(() => Row(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Text('homepage_greetings'.tr,
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
-                    Text(", ${DummyUser.name}",
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    Text(
+                      'homepage_greetings'.tr,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    Text(
+                      ", ${c.displayName}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text('words_start_learning'.tr,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white.withOpacity(0.9),
-                    )),
+                Text(
+                  'words_start_learning'.tr,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
               ],
             ),
             const Spacer(),
+            // 🧍 Avatar (nếu có trong LocalStorage)
             CircleAvatar(
               radius: 20,
               backgroundColor: Colors.white.withOpacity(0.2),
-              child: const Icon(Icons.person, color: Colors.white),
+              backgroundImage: (c.user.value?.avatarUrl != null &&
+                  c.user.value!.avatarUrl!.isNotEmpty)
+                  ? NetworkImage(c.user.value!.avatarUrl!)
+                  : null,
+              child: (c.user.value?.avatarUrl == null ||
+                  c.user.value!.avatarUrl!.isEmpty)
+                  ? const Icon(Icons.person, color: Colors.white)
+                  : null,
             ),
           ],
-        ),
+        )),
       ),
     );
   }

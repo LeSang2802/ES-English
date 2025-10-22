@@ -16,13 +16,10 @@ class SavedWordPage extends GetView<SavedWordController> {
       isLoading: controller.isLoading,
       isNestedScroll: false,
       backgroundColor: BgColors.main,
-      appBar: const BaseAppBar(title: "Danh sách từ đã lưu"),
+      appBar: BaseAppBar(title: 'list_saved_word'.tr),
       body: Obx(() {
-        // if (controller.isLoading.value) {
-        //   return const Center(child: CircularProgressIndicator());
-        // }
         if (controller.words.isEmpty) {
-          return const Center(child: Text("Chưa có từ nào được lưu"));
+          return Center(child: Text('no_data'.tr));
         }
 
         return ListView.builder(

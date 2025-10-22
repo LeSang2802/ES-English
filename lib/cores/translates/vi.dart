@@ -34,5 +34,16 @@ class Vietnamese {
     'for_intermediate': 'Cấp độ trung cấp',
     'for_advanced': 'Cấp độ nâng cao',
     'no_topic': 'Không tìm thấy chủ đề nào',
+    'list_saved_word': 'Danh sách từ đã lưu',
+    'personal_profile': 'Hồ sơ cá nhân',
+    'name': 'Họ và tên',
+    'age': 'Tuổi',
+    'job': 'Nghề nghiệp',
+    'avatar_url': 'Đường dẫn Ảnh đại diện ',
+    'save_change': 'Lưu thay đổi',
+    'sex': 'Giới tính',
+    'male': 'Nam',
+    'female': 'Nữ',
+    'other': 'Khác',
   };
 }

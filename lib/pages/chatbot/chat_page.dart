@@ -87,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ES-GPT", style: TextStyle(color : TextColors.appBar)),
+        title: Text("ES-GPT", style: TextStyle(color : TextColors.appBar)),
         backgroundColor: BgColors.appBar,
       ),
       body: DashChat(

@@ -4,6 +4,7 @@ class ApiPaths {
   static const String register = "/api/auth/register";
   static const String sendCode = "/api/auth/send-code";
   static const String verifyCode = "/api/auth/verify";
+  static const String profile = "/api/users/profile";
 
   /// skill / level / topic
   static const String skill = "/api/admin/catalog/Skills";

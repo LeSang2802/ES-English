@@ -22,10 +22,17 @@ class AccountPage extends StatelessWidget {
         currentIndex: 3,
         onTap: (index) {
           switch (index) {
-            case 0: Get.offAllNamed('/home'); break;
-            case 1: Get.offAllNamed('/skill'); break;
-            case 2: Get.offAllNamed('/progress'); break;
-            case 3: break;
+            case 0:
+              Get.offAllNamed('/home');
+              break;
+            case 1:
+              Get.offAllNamed('/skill');
+              break;
+            case 2:
+              Get.offAllNamed('/progress');
+              break;
+            case 3:
+              break;
           }
         },
       ),
@@ -49,6 +56,8 @@ class AccountPage extends StatelessWidget {
             const SizedBox(height: 12),
             _learnedTodayCard(c),
             const SizedBox(height: 16),
+            _settingTileProfile(c),
+            const SizedBox(height: 12),
             _settingTileLanguage(c),
             const SizedBox(height: 12),
             _settingTileDarkMode(c),
@@ -60,7 +69,6 @@ class AccountPage extends StatelessWidget {
     );
   }
 
-  // ===== AppBar phẳng như Home (có avatar) =====
   PreferredSizeWidget _buildAccountAppBar(
       BuildContext context, AccountController c) {
     return PreferredSize(
@@ -78,98 +86,105 @@ class AccountPage extends StatelessWidget {
             )
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // 🧍 Avatar ở giữa
-            CircleAvatar(
-              radius: 32,
-              backgroundColor: Colors.white,
-              child: const Icon(Icons.person, size: 40, color: Colors.blue),
-            ),
-            const SizedBox(height: 10),
-
-            // 👋 Hi, Pham Long
-            Obx(() => Text(
-              '${'homepage_greetings'.tr}, ${c.userName.value}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-              ),
+        child: Obx(() => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Colors.white,
+                  backgroundImage:
+                      (c.avatarUrl != null && c.avatarUrl!.isNotEmpty)
+                          ? NetworkImage(c.avatarUrl!)
+                          : null,
+                  child: (c.avatarUrl == null || c.avatarUrl!.isEmpty)
+                      ? const Icon(Icons.person, size: 40, color: Colors.blue)
+                      : null,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  '${'homepage_greetings'.tr}, ${c.displayName}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  'welcome_back'.tr,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
             )),
-
-            // 👋 Welcome back
-            Text(
-              'welcome_back'.tr, // nhớ thêm key này vào translate
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
 
-
-  // ===== Card Learned Today như hình =====
   Widget _learnedTodayCard(AccountController c) {
     return Obx(() => Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(RadiusDimens.large),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 8,
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(RadiusDimens.large),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                blurRadius: 8,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
+          child: Column(
             children: [
-              Expanded(
-                child: Text(
-                  'Beginner',
-                  style: TextStyles.small.copyWith(color: Colors.grey[700]),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Beginner',
+                      style: TextStyles.small.copyWith(color: Colors.grey[700]),
+                    ),
+                  ),
+                  Text('Today',
+                      style: TextStyles.smallBold
+                          .copyWith(color: AppColors.primary)),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('${c.learnedToday.value}min',
+                      style: TextStyles.largeBold),
+                  const SizedBox(width: 6),
+                  Text('/ ${c.targetToday.value}min',
+                      style:
+                          TextStyles.small.copyWith(color: Colors.grey[600])),
+                ],
+              ),
+              const SizedBox(height: 10),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: c.progressToday,
+                  minHeight: 6,
+                  color: AppColors.primary,
+                  backgroundColor: AppColors.primary.withOpacity(0.15),
                 ),
               ),
-              Text('Today',
-                  style: TextStyles.smallBold
-                      .copyWith(color: AppColors.primary)),
             ],
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Text('${c.learnedToday.value}min',
-                  style: TextStyles.largeBold),
-              const SizedBox(width: 6),
-              Text('/ ${c.targetToday.value}min',
-                  style:
-                  TextStyles.small.copyWith(color: Colors.grey[600])),
-            ],
-          ),
-          const SizedBox(height: 10),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: c.progressToday,
-              minHeight: 6,
-              color: AppColors.primary,
-              backgroundColor: AppColors.primary.withOpacity(0.15),
-            ),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 
-  // ====== Tile: Language với popup EN/VI ======
+  Widget _settingTileProfile(AccountController c) {
+    return _settingCard(
+      icon: Icons.person_outline_rounded,
+      title: 'Chỉnh sửa hồ sơ',
+      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      onTap: () => Get.toNamed('/profile'),
+    );
+  }
+
   Widget _settingTileLanguage(AccountController c) {
     final GlobalKey btnKey = GlobalKey();
     return _settingCard(
@@ -181,10 +196,11 @@ class AccountPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           onTap: () async {
             final RenderBox box =
-            btnKey.currentContext!.findRenderObject() as RenderBox;
+                btnKey.currentContext!.findRenderObject() as RenderBox;
             final RenderBox overlay =
-            Overlay.of(ctx).context.findRenderObject() as RenderBox;
-            final Offset pos = box.localToGlobal(Offset.zero, ancestor: overlay);
+                Overlay.of(ctx).context.findRenderObject() as RenderBox;
+            final Offset pos =
+                box.localToGlobal(Offset.zero, ancestor: overlay);
             final RelativeRect position = RelativeRect.fromLTRB(
               pos.dx,
               pos.dy + box.size.height + 6,
@@ -206,7 +222,7 @@ class AccountPage extends StatelessWidget {
                       const Text('E :  ',
                           style: TextStyle(fontWeight: FontWeight.w600)),
                       const SizedBox(width: 6),
-                       Text('english'.tr),
+                      Text('english'.tr),
                       const Spacer(),
                       if (c.currentLangCode == 'en')
                         const Icon(Icons.check, size: 18),
@@ -220,7 +236,7 @@ class AccountPage extends StatelessWidget {
                       const Text('V :  ',
                           style: TextStyle(fontWeight: FontWeight.w600)),
                       const SizedBox(width: 6),
-                       Text('vietnamese'.tr),
+                      Text('vietnamese'.tr),
                       const Spacer(),
                       if (c.currentLangCode == 'vi')
                         const Icon(Icons.check, size: 18),
@@ -235,42 +251,40 @@ class AccountPage extends StatelessWidget {
             }
           },
           child: Obx(() => Container(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  c.currentLangCode.toUpperCase(),
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(width: 6),
-                const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
-              ],
-            ),
-          )),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      c.currentLangCode.toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
+                  ],
+                ),
+              )),
         ),
       ),
     );
   }
 
-  // ====== Tile: Dark mode (dummy switch) ======
   Widget _settingTileDarkMode(AccountController c) {
     return Obx(() => _settingCard(
-      icon: Icons.dark_mode_outlined,
-      title: 'dark_mode'.tr,
-      trailing: Switch(
-        value: c.isDarkMode.value,
-        onChanged: c.toggleDarkMode,
-      ),
-    ));
+          icon: Icons.dark_mode_outlined,
+          title: 'dark_mode'.tr,
+          trailing: Switch(
+            value: c.isDarkMode.value,
+            onChanged: c.toggleDarkMode,
+          ),
+        ));
   }
 
-  // ====== Tile: Logout ======
   Widget _settingTileLogout(AccountController c) {
     return _settingCard(
       icon: Icons.logout_rounded,
@@ -280,7 +294,6 @@ class AccountPage extends StatelessWidget {
     );
   }
 
-  // ====== Helper build setting card ======
   Widget _settingCard({
     required IconData icon,
     required String title,
