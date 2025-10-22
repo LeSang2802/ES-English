@@ -7,8 +7,8 @@ part 'topic_response_model.g.dart';
 class TopicResponseModel with _$TopicResponseModel {
   const factory TopicResponseModel({
     @JsonKey(name: '_id') String? id,
-    SkillRef? skill_id, // <-- thay đổi
-    LevelRef? level_id, // <-- thay đổi
+    SkillRef? skill_id,
+    LevelRef? level_id,
     String? title,
     String? description,
     String? type,
