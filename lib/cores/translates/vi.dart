@@ -45,5 +45,15 @@ class Vietnamese {
     'male': 'Nam',
     'female': 'Nữ',
     'other': 'Khác',
+    'edit_profile': 'Chỉnh sửa hồ sơ',
+    'user': 'Người dùng',
+    'error': 'Lỗi',
+    'success': 'Thành công',
+    'photo_uploaded': 'Đã tải ảnh lên',
+    'photo_upload_failed': 'Tải ảnh lên thất bại',
+    'profile_update_successful': 'Cập nhật hồ sơ thành công',
+    'cannot_save': 'Không thể lưu thông tin',
+    'loading': 'Loading',
+    'change_photo': 'Đổi ảnh',
   };
 }

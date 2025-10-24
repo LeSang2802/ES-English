@@ -26,6 +26,8 @@ dependencies:
   freezed_annotation: 2.4.4
   json_annotation:  4.9.0
   get_storage: 2.1.1
+  image_picker: ^1.2.0
+  cloudinary_public: ^0.23.1
 
 dev_dependencies:
   flutter_test:

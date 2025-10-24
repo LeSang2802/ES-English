@@ -179,7 +179,7 @@ class AccountPage extends StatelessWidget {
   Widget _settingTileProfile(AccountController c) {
     return _settingCard(
       icon: Icons.person_outline_rounded,
-      title: 'Chỉnh sửa hồ sơ',
+      title: 'edit_profile'.tr,
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: () => Get.toNamed('/profile'),
     );
@@ -290,7 +290,9 @@ class AccountPage extends StatelessWidget {
       icon: Icons.logout_rounded,
       title: 'logout'.tr,
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-      onTap: c.logout,
+      onTap: () async {
+        await c.logout();
+      },
     );
   }
 

@@ -44,5 +44,16 @@ class English {
     'male': 'Male',
     'female': 'Female',
     'other': 'Other',
+    'edit_profile': 'Edit profile',
+    'logout_successfully': 'Log out successfully',
+    'user': 'User',
+    'error': 'Error',
+    'success': 'Success',
+    'photo_uploaded': 'Photo uploaded',
+    'photo_upload_failed': 'Photo upload failed',
+    'profile_update_successful': 'Profile update successful',
+    'cannot_save': 'Cannot save',
+    'loading': 'Đang tải',
+    'change_photo': 'Change photo',
   };
 }
