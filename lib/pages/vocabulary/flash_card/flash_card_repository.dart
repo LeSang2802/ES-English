@@ -12,10 +12,25 @@ class FlashCardRepository {
       final response = await _client.get(
         "${ApiPaths.flashcard}?topic_id=$topicId",
       );
-      final List data = response.data['items'];
-      return data.map((e) => FlashCardModel.fromJson(e)).toList();
+
+      final data = response.data;
+
+      if (data is Map<String, dynamic> && data['items'] is List) {
+        final items = data['items'] as List<dynamic>;
+        return items
+            .map((e) => FlashCardModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else if (data is List) {
+        // Trường hợp backend trả thẳng mảng
+        return data
+            .map((e) => FlashCardModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        print("⚠️ Định dạng API flashcards không đúng: $data");
+        return [];
+      }
     } catch (e) {
-      print("Error fetching flashcards: $e");
+      print("❌ Lỗi getFlashcards: $e");
       rethrow;
     }
   }
@@ -29,9 +44,8 @@ class FlashCardRepository {
       );
       return res.data["saved"] ?? false; // Trả về true nếu đã lưu, false nếu bỏ lưu
     } catch (e) {
-      print(" Lỗi toggleSave: $e");
+      print("❌ Lỗi toggleSave: $e");
       rethrow;
     }
   }
 }
-

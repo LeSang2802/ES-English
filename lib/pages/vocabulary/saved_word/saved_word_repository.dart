@@ -6,19 +6,32 @@ import 'package:es_english/models/vocabulary/saved_word/saved_word_model.dart';
 class SavedWordRepository {
   final BaseApiClient _client = BaseApiClient();
 
-  /// 🔹 Lấy danh sách từ đã lưu
+  //Lấy danh sách từ đã lưu của người dùng
   Future<List<SavedWordModel>> getSavedWords() async {
     try {
       final res = await _client.get(ApiPaths.saveWord);
-      final List data = res.data;
-      return data.map((e) => SavedWordModel.fromJson(e)).toList();
+      final data = res.data;
+
+      if (data is Map<String, dynamic> && data['items'] is List) {
+        final items = data['items'] as List<dynamic>;
+        return items
+            .map((e) => SavedWordModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else if (data is List) {
+        return data
+            .map((e) => SavedWordModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        print("⚠️ Định dạng API saved-words không đúng: $data");
+        return [];
+      }
     } catch (e) {
       print("❌ Lỗi getSavedWords: $e");
       rethrow;
     }
   }
 
-  /// 🔹 Toggle lưu / bỏ lưu
+  //Toggle lưu / bỏ lưu từ vựng
   Future<bool> toggleSave(String flashcardId) async {
     try {
       final res = await _client.post(
