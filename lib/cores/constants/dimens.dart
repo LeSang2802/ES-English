@@ -24,9 +24,13 @@ class MarginDimens {
   MarginDimens._();
 
   static double small = 4.w;
+  static double reading = 6.w;
   static double normal = 8.w;
+  static double home = 10.w;
+  static double listening = 12.w;
   static double large = 16.w;
-  static double flashcard = 56.w;
+  static double extra = 24.w;
+  static double flashcard = 40.w;
 }
 
 class RadiusDimens {

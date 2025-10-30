@@ -2,228 +2,82 @@ import '../../models/home/home_continue_model.dart';
 import '../../models/home/home_flashcard_model.dart';
 import '../../models/progress/progress_model.dart';
 import '../../models/reading/reading.dart';
-import '../../models/vocabulary/flash_card/flash_card_model.dart';
-import '../../models/vocabulary/saved_word/saved_word_model.dart';
-import '../../models/vocabulary/vocabulary_model.dart';
 
 class DummyUtil {
-  // static List<FlashCardModel> flashCards = [
-  //   FlashCardModel(
-  //     id: "1",
-  //     en: "Dog",
-  //     vi: "Con chó",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/dog.jpg",
-  //     audioUrl: "assets/audio/animals/dog.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "2",
-  //     en: "Cat",
-  //     vi: "Con mèo",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/cat.jpg",
-  //     audioUrl: "assets/audio/animals/cat.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "3",
-  //     en: "Elephant",
-  //     vi: "Con voi",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/elephant.jpg",
-  //     audioUrl: "assets/audio/animals/elephant.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "4",
-  //     en: "Giraffe",
-  //     vi: "Con hươu cao cổ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/giraffe.jpg",
-  //     audioUrl: "assets/audio/animals/giraffe.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "5",
-  //     en: "Tiger",
-  //     vi: "Con hổ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/tiger.jpg",
-  //     audioUrl: "assets/audio/animals/tiger.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "6",
-  //     en: "Monkey",
-  //     vi: "Con khỉ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/monkey.jpg",
-  //     audioUrl: "assets/audio/animals/monkey.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "7",
-  //     en: "Horse",
-  //     vi: "Con ngựa",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/horse.jpg",
-  //     audioUrl: "assets/audio/animals/horse.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "8",
-  //     en: "Rabbit",
-  //     vi: "Con thỏ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/rabbit.jpg",
-  //     audioUrl: "assets/audio/animals/rabbit.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "9",
-  //     en: "Bear",
-  //     vi: "Con gấu",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/bear.jpg",
-  //     audioUrl: "assets/audio/animals/bear.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "10",
-  //     en: "Fox",
-  //     vi: "Con cáo",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/fox.jpg",
-  //     audioUrl: "assets/audio/animals/fox.mp3",
-  //   ),
-  // ];
-
-  // static List<FlashCardModel> flashCards = [
-  //   FlashCardModel(
-  //     id: "1",
-  //     en: "Dog",
-  //     vi: "Con chó",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/dog.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/dog--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "2",
-  //     en: "Cat",
-  //     vi: "Con mèo",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/cat.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/cat--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "3",
-  //     en: "Elephant",
-  //     vi: "Con voi",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/elephant.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/elephant--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "4",
-  //     en: "Giraffe",
-  //     vi: "Con hươu cao cổ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/giraffe.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/giraffe--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "5",
-  //     en: "Tiger",
-  //     vi: "Con hổ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/tiger.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/tiger--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "6",
-  //     en: "Monkey",
-  //     vi: "Con khỉ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/monkey.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/monkey--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "7",
-  //     en: "Horse",
-  //     vi: "Con ngựa",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/horse.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/horse--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "8",
-  //     en: "Rabbit",
-  //     vi: "Con thỏ",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/rabbit.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/rabbit--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "9",
-  //     en: "Bear",
-  //     vi: "Con gấu",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/bear.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/bear--_us_1.mp3",
-  //   ),
-  //   FlashCardModel(
-  //     id: "10",
-  //     en: "Fox",
-  //     vi: "Con cáo",
-  //     type: "n",
-  //     imageUrl: "assets/images/animals/fox.jpg",
-  //     audioUrl: "https://ssl.gstatic.com/dictionary/static/sounds/oxford/fox--_us_1.mp3",
-  //   ),
-  // ];
-
-
-
-
-  static List<Vocabulary> vocabulariesList = [
-    Vocabulary(
-      id: "1",
-      name: "Con vật",
-      imageUrl: "assets/images/dog.jpg",
-    ),
-    Vocabulary(
-      id: "2",
-      name: "Đồ vật",
-      imageUrl: null,
-    ),
-    Vocabulary(
-      id: "3",
-      name: "Phương tiện giao thông",
-      imageUrl: null,
-    ),
-    Vocabulary(
-      id: "4",
-      name: "Công nghệ",
-      imageUrl: null,
-    ),
-  ];
 
   static final List<SkillProgress> progressList = [
     // Beginner
-    SkillProgress(skill: 'Listening', level: 'beginner', completed: 8, total: 20, percent: 40),
-    SkillProgress(skill: 'Reading', level: 'beginner', completed: 10, total: 20, percent: 50),
-    SkillProgress(skill: 'Speaking', level: 'beginner', completed: 7, total: 20, percent: 35),
-    SkillProgress(skill: 'Writing', level: 'beginner', completed: 6, total: 20, percent: 30),
+    SkillProgress(skill: 'Listening',
+        level: 'beginner',
+        completed: 8,
+        total: 20,
+        percent: 40),
+    SkillProgress(skill: 'Reading',
+        level: 'beginner',
+        completed: 10,
+        total: 20,
+        percent: 50),
+    SkillProgress(skill: 'Speaking',
+        level: 'beginner',
+        completed: 7,
+        total: 20,
+        percent: 35),
+    SkillProgress(skill: 'Writing',
+        level: 'beginner',
+        completed: 6,
+        total: 20,
+        percent: 30),
 
     // Intermediate
-    SkillProgress(skill: 'Listening', level: 'intermediate', completed: 15, total: 20, percent: 75),
-    SkillProgress(skill: 'Reading', level: 'intermediate', completed: 14, total: 20, percent: 70),
-    SkillProgress(skill: 'Speaking', level: 'intermediate', completed: 13, total: 20, percent: 65),
-    SkillProgress(skill: 'Writing', level: 'intermediate', completed: 12, total: 20, percent: 60),
+    SkillProgress(skill: 'Listening',
+        level: 'intermediate',
+        completed: 15,
+        total: 20,
+        percent: 75),
+    SkillProgress(skill: 'Reading',
+        level: 'intermediate',
+        completed: 14,
+        total: 20,
+        percent: 70),
+    SkillProgress(skill: 'Speaking',
+        level: 'intermediate',
+        completed: 13,
+        total: 20,
+        percent: 65),
+    SkillProgress(skill: 'Writing',
+        level: 'intermediate',
+        completed: 12,
+        total: 20,
+        percent: 60),
 
     // Advanced
-    SkillProgress(skill: 'Listening', level: 'advanced', completed: 5, total: 20, percent: 25),
-    SkillProgress(skill: 'Reading', level: 'advanced', completed: 4, total: 20, percent: 20),
-    SkillProgress(skill: 'Speaking', level: 'advanced', completed: 3, total: 20, percent: 15),
-    SkillProgress(skill: 'Writing', level: 'advanced', completed: 2, total: 20, percent: 10),
+    SkillProgress(skill: 'Listening',
+        level: 'advanced',
+        completed: 5,
+        total: 20,
+        percent: 25),
+    SkillProgress(skill: 'Reading',
+        level: 'advanced',
+        completed: 4,
+        total: 20,
+        percent: 20),
+    SkillProgress(skill: 'Speaking',
+        level: 'advanced',
+        completed: 3,
+        total: 20,
+        percent: 15),
+    SkillProgress(skill: 'Writing',
+        level: 'advanced',
+        completed: 2,
+        total: 20,
+        percent: 10),
   ];
   static List<Passage> passages = [
     Passage(
       id: "1",
       title: "My Pet Dog",
       content:
-          "I have a pet dog named Max. He is very playful and loves to run in the park every morning. Max is brown and has big ears. He barks loudly when he sees strangers but is gentle with children.",
+      "I have a pet dog named Max. He is very playful and loves to run in the park every morning. Max is brown and has big ears. He barks loudly when he sees strangers but is gentle with children.",
       questions: [
         Question(
           id: "q1",
@@ -264,7 +118,7 @@ class DummyUtil {
       id: "2",
       title: "A Day at the Beach",
       content:
-          "Last weekend, Anna and her family went to the beach. They swam in the sea, built sandcastles, and had a picnic. The weather was sunny, but it became windy in the afternoon. Anna enjoyed collecting shells and watching seagulls fly overhead.",
+      "Last weekend, Anna and her family went to the beach. They swam in the sea, built sandcastles, and had a picnic. The weather was sunny, but it became windy in the afternoon. Anna enjoyed collecting shells and watching seagulls fly overhead.",
       questions: [
         Question(
           id: "q4",
@@ -305,7 +159,7 @@ class DummyUtil {
       id: "3",
       title: "The Library Visit",
       content:
-          "Tom visited the library to borrow books. He found a book about space exploration that excited him. The library was quiet, and Tom spent two hours reading. He also attended a storytelling session for kids.",
+      "Tom visited the library to borrow books. He found a book about space exploration that excited him. The library was quiet, and Tom spent two hours reading. He also attended a storytelling session for kids.",
       questions: [
         Question(
           id: "q7",
@@ -335,7 +189,7 @@ class DummyUtil {
       id: "4",
       title: "The City Park",
       content:
-          "The city park is a popular place for families. There are tall trees, a small pond with ducks, and a playground. Every Sunday, people gather for a community picnic. Last week, a music band played near the pond, attracting many visitors.",
+      "The city park is a popular place for families. There are tall trees, a small pond with ducks, and a playground. Every Sunday, people gather for a community picnic. Last week, a music band played near the pond, attracting many visitors.",
       questions: [
         Question(
           id: "q9",
@@ -374,21 +228,13 @@ class DummyUtil {
     ),
   ];
 
-  // static final List<SavedWordModel> savedWords = [
-  //   SavedWordModel(id: "1", en: "Friend", vi: "Bạn bè", type: "(n)"),
-  //   SavedWordModel(id: "2", en: "Developer", vi: "Nhà phát triển", type: "(n)"),
-  //   SavedWordModel(id: "3", en: "Run", vi: "Chạy", type: "(v)"),
-  //   SavedWordModel(id: "4", en: "Seminar", vi: "Hội thảo", type: "(n)"),
-  //   SavedWordModel(id: "5", en: "Miss", vi: "Cô / nhớ", type: "(n)/(v)"),
-  //   SavedWordModel(id: "6", en: "Tester", vi: "Người thử nghiệm", type: "(n)"),
-  //   SavedWordModel(id: "7", en: "Software", vi: "Phần mềm", type: "(n)"),
-  // ];
-
-
   static final List<String> homeSliderImages = [
-    'assets/images/animals/bear.jpg',
-    'assets/images/animals/cat.jpg',
-    'assets/images/animals/dog.jpg',
+    // 'assets/images/animals/bear.jpg',
+    // 'assets/images/animals/cat.jpg',
+    // 'assets/images/animals/dog.jpg',
+    'assets/images/banners/banner2.jpg',
+    'assets/images/banners/banner3.jpg',
+    'assets/images/banners/banner1.jpg',
   ];
 
   /// Continue Study (mock – chọn 1 bản ghi đang học dở)
@@ -409,14 +255,9 @@ class DummyUtil {
   );
 
 
-
-
-  /// Thời lượng mục tiêu trong ngày (phút)
+  //Thời lượng mục tiêu trong ngày (phút)
   static const int targetMinutes = 30;
 
-  /// Thời gian đã học hôm nay (mock)
+  //Thời gian đã học hôm nay (mock)
   static int learnedTodayMinutes = 18;
-
-  /// Tên user
-  static const String userName = 'Long';
 }

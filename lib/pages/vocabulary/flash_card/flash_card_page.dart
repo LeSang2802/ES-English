@@ -20,7 +20,12 @@ class FlashCardPage extends GetView<FlashCardController> {
       isLoading: controller.isLoading,
       isNestedScroll: false,
       backgroundColor: BgColors.main,
-      appBar: BaseAppBar(title: controller.topicTitle),
+      appBar: BaseAppBar(title: controller.topicTitle,
+        leadingWidget: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Get.offAllNamed('/vocabulary'),
+        ),
+      ),
       isPaddingDefault: false,
       body: Obx(() {
         if (controller.vocabularies.isEmpty) {
@@ -31,7 +36,7 @@ class FlashCardPage extends GetView<FlashCardController> {
 
         return Column(
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: MarginDimens.extra),
 
             Expanded(
               child: PageView.builder(
@@ -52,17 +57,17 @@ class FlashCardPage extends GetView<FlashCardController> {
               ),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: MarginDimens.normal),
 
-            // 🔹 Hiển thị vị trí thẻ
+            //Hiển thị vị trí thẻ
             Obx(() => Text(
               "${controller.currentIndex.value + 1}/${vocabularies.length}",
               style: TextStyles.largeBold,
             )),
 
-            const SizedBox(height: 16),
+            SizedBox(height: MarginDimens.large),
 
-            // 🔹 Nút điều hướng trái - phải
+            // Nút điều hướng trái - phải
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -78,7 +83,7 @@ class FlashCardPage extends GetView<FlashCardController> {
                   icon: Icon(Icons.arrow_back_ios,
                       color: AppColors.primary, size: IconDimens.large),
                 ),
-                const SizedBox(width: 40),
+               SizedBox(width: MarginDimens.flashcard),
                 IconButton(
                   onPressed: () {
                     controller.nextCard();
@@ -94,9 +99,9 @@ class FlashCardPage extends GetView<FlashCardController> {
               ],
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: MarginDimens.large),
 
-            // 🔹 Thanh tiến trình
+            //Thanh tiến trình
             Obx(() => SizedBox(
               width: MediaQuery.of(context).size.width * 0.6,
               child: LinearProgressIndicator(
@@ -107,8 +112,7 @@ class FlashCardPage extends GetView<FlashCardController> {
                 AlwaysStoppedAnimation<Color>(AppColors.primary),
               ),
             )),
-
-            const SizedBox(height: 24),
+            SizedBox(height: MarginDimens.extra),
           ],
         );
       }),
@@ -128,7 +132,7 @@ class FlashCardPage extends GetView<FlashCardController> {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(16),
+      padding:EdgeInsets.all(MarginDimens.large),
       child: Column(
         children: [
           // ⭐ Icon lưu
@@ -151,7 +155,7 @@ class FlashCardPage extends GetView<FlashCardController> {
               height: 150,
               fit: BoxFit.contain,
             ),
-          const SizedBox(height: 16),
+          SizedBox(height: MarginDimens.large),
           Text(
             word.word ?? '',
             style: TextStyles.extraBold.copyWith(fontSize: 26),
@@ -187,7 +191,7 @@ class FlashCardPage extends GetView<FlashCardController> {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(MarginDimens.large),
       child: Center(
         child: Text(
           "${word.part_of_speech != null ? "(${word.part_of_speech}) " : ""}${word.meaning_vi ?? ""}",

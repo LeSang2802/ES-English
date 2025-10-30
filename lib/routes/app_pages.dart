@@ -8,14 +8,15 @@ import 'package:es_english/pages/login/login_binding.dart';
 import 'package:es_english/pages/login/login_page.dart';
 import 'package:es_english/pages/progress/progress_binding.dart';
 import 'package:es_english/pages/progress/progress_page.dart';
-import 'package:es_english/pages/reading/reading_binding.dart';
-import 'package:es_english/pages/reading/reading_page.dart';
 import 'package:es_english/pages/register/register_binding.dart';
 import 'package:es_english/pages/register/register_page.dart';
+import 'package:es_english/pages/skill/multiple_choice/listening/listening_binding.dart';
+import 'package:es_english/pages/skill/multiple_choice/listening/listening_page.dart';
 import 'package:es_english/pages/skill/skill_binding.dart';
 import 'package:es_english/pages/skill/skill_page.dart';
 import 'package:es_english/pages/topic/topic_binding.dart';
 import 'package:es_english/pages/topic/topic_page.dart';
+import 'package:es_english/pages/vocabulary/flash_card/end_flash_card_page.dart';
 import 'package:es_english/pages/vocabulary/flash_card/flash_card_page.dart';
 import 'package:es_english/pages/vocabulary/saved_word/saved_word_binding.dart';
 import 'package:es_english/routes/route_name.dart';
@@ -24,6 +25,9 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import '../pages/chatbot/chat_page.dart';
 import '../pages/level/level_binding.dart';
 import '../pages/level/level_page.dart';
+import '../pages/skill/multiple_choice/reading/reading_binding.dart';
+import '../pages/skill/multiple_choice/reading/reading_page.dart';
+import '../pages/vocabulary/flash_card/end_flash_card_binding.dart';
 import '../pages/vocabulary/flash_card/flash_card_binding.dart';
 import '../pages/vocabulary/saved_word/saved_word_page.dart';
 import '../pages/vocabulary/vocabulary_binding.dart';
@@ -71,6 +75,11 @@ class AppPages {
     GetPage(
       name: RouteNames.flashCard,
       page: () => const FlashCardPage(),
+      binding: EndFlashCardBinding(),
+    ),
+    GetPage(
+      name: RouteNames.endFlashCard,
+      page: () => const EndFlashCardPage(),
       binding: FlashCardBinding(),
     ),
     GetPage(
@@ -82,6 +91,11 @@ class AppPages {
       name: RouteNames.reading,
       page: () => const ReadingPage(),
       binding: ReadingBinding(),
+    ),
+    GetPage(
+      name: RouteNames.listening,
+      page: () => const ListeningPage(),
+      binding: ListeningBinding(),
     ),
     GetPage(
       name: RouteNames.level,

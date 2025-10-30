@@ -8,8 +8,10 @@ class RouteNames {
   static const String account = '/account';
   static const String vocabulary = '/vocabulary';
   static const String flashCard = '/flashCard';
+  static const String endFlashCard = '/endFlashCard';
   static const String savedWord = '/savedWord';
   static const String reading = '/reading';
+  static const String listening = '/listening';
   static const String level = '/level';
   static const String chatbot = '/chatbot';
   static const String topic = '/topic';

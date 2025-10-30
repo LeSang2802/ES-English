@@ -55,5 +55,10 @@ class Vietnamese {
     'cannot_save': 'Không thể lưu thông tin',
     'loading': 'Loading',
     'change_photo': 'Đổi ảnh',
+    'congratulation': 'Chúc mừng!',
+    'reviewed_all_card': 'Bạn đã ôn tập tất cả các thẻ.',
+    'back_to_first': 'Quay lại thẻ đầu tiên.',
+    'submit': 'Nộp bài',
+    'play_audio': 'Phát audio',
   };
 }

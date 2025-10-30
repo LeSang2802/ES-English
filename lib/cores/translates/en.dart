@@ -55,5 +55,10 @@ class English {
     'cannot_save': 'Cannot save',
     'loading': 'Đang tải',
     'change_photo': 'Change photo',
+    'congratulation': 'Congratulation!',
+    'reviewed_all_card': 'You have reviewed all the cards.',
+    'back_to_first': 'Back to the first card.',
+    'submit': 'Submit',
+    'play_audio': 'Play audio',
   };
 }

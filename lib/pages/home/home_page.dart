@@ -115,7 +115,7 @@ class HomePage extends GetView<HomeController> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: MarginDimens.small),
                 Text(
                   'words_start_learning'.tr,
                   style: TextStyle(
@@ -166,17 +166,17 @@ class HomePage extends GetView<HomeController> {
               // Text('My courses', style: TextStyles.smallBold.copyWith(color: AppColors.primary)),
             ],
           ),
-          SizedBox(height: 6),
+          SizedBox(height: MarginDimens.reading),
           Row(
             children: [
               Text('${c.learnedTodayMin.value}min',
                   style: TextStyles.largeBold),
-              const SizedBox(width: 6),
+              SizedBox(width: MarginDimens.reading),
               Text('/ ${c.targetMin.value}min',
                   style: TextStyles.small.copyWith(color: Colors.grey)),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: MarginDimens.home),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
@@ -201,7 +201,7 @@ class HomePage extends GetView<HomeController> {
         indicatorRadius: 3,
         indicatorColor: AppColors.primary,
         indicatorBackgroundColor: Colors.grey.shade400,
-        autoPlayInterval: 4000,
+        autoPlayInterval: 3000,
         isLoop: true,
         children: c.sliderImages.map((p) {
           return Container(
@@ -336,9 +336,4 @@ class HomePage extends GetView<HomeController> {
       ),
     );
   }
-}
-
-/// Giả lập hiển thị tên user ở AppBar (bạn có thể thay bằng profile thực)
-class DummyUser {
-  static const name = 'Long';
 }

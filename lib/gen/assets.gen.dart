@@ -40,6 +40,16 @@ class $AssetsImagesGen {
 
   /// Directory path: assets/images/animals
   $AssetsImagesAnimalsGen get animals => const $AssetsImagesAnimalsGen();
+
+  /// File path: assets/images/app_icon.jpg
+  AssetGenImage get appIcon =>
+      const AssetGenImage('assets/images/app_icon.jpg');
+
+  /// File path: assets/images/congra.png
+  AssetGenImage get congra => const AssetGenImage('assets/images/congra.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [appIcon, congra];
 }
 
 class $AssetsAudioAnimalsGen {

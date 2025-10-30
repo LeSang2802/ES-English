@@ -17,7 +17,12 @@ class VocabularyPage extends GetView<VocabularyController> {
       isLoading: controller.isLoading,
       isNestedScroll: false,
       backgroundColor: BgColors.main,
-      appBar: BaseAppBar(title: 'vocabulary'.tr),
+      appBar: BaseAppBar(title: 'vocabulary'.tr,
+        leadingWidget: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Get.offNamed('/home'),
+        ),
+      ),
       body: Obx(() {
         final topics = controller.topics.toList();
         return ListView(
@@ -28,7 +33,7 @@ class VocabularyPage extends GetView<VocabularyController> {
             Text('choose_topic'.tr, style: TextStyles.mediumBold),
             const SizedBox(height: 12),
             if (topics.isEmpty)
-              Center(child: Text('Không có chủ đề nào.')),
+              Center(child: Text('no_data'.tr)),
             ...topics.map(
                   (topic) => _buildTopicCard(context, topic, controller),
             ),

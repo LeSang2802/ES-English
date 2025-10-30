@@ -61,9 +61,21 @@ class FlashCardController extends GetxController {
     }
   }
 
+  // void nextCard() {
+  //   if (currentIndex.value < vocabularies.length - 1) currentIndex.value++;
+  // }
   void nextCard() {
-    if (currentIndex.value < vocabularies.length - 1) currentIndex.value++;
+    if (currentIndex.value < vocabularies.length - 1) {
+      currentIndex.value++;
+    } else {
+      currentIndex.value = 0;
+      Get.toNamed('/endFlashCard', arguments: {
+        'topic_id': topicId,
+        'topic_title': topicTitle,
+      });
+    }
   }
+
 
   void prevCard() {
     if (currentIndex.value > 0) currentIndex.value--;
