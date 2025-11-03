@@ -12,6 +12,7 @@ import 'package:es_english/pages/register/register_binding.dart';
 import 'package:es_english/pages/register/register_page.dart';
 import 'package:es_english/pages/skill/multiple_choice/listening/listening_binding.dart';
 import 'package:es_english/pages/skill/multiple_choice/listening/listening_page.dart';
+import 'package:es_english/pages/skill/multiple_choice/shared/mcq_result_page.dart';
 import 'package:es_english/pages/skill/skill_binding.dart';
 import 'package:es_english/pages/skill/skill_page.dart';
 import 'package:es_english/pages/topic/topic_binding.dart';
@@ -115,6 +116,10 @@ class AppPages {
       name: RouteNames.profile,
       page: () => const ProfilePage(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: RouteNames.mcqResult,
+      page: () => McqResultPage(),
     ),
   ];
 }

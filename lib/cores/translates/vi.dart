@@ -60,5 +60,11 @@ class Vietnamese {
     'back_to_first': 'Quay lại thẻ đầu tiên.',
     'submit': 'Nộp bài',
     'play_audio': 'Phát audio',
+    'result': 'Kết quả',
+    'list_questions_answers': 'Danh sách câu hỏi và đáp án đúng',
+    'sentence': 'Câu',
+    'correct_answer': 'Đáp án đúng',
+    'back_to_home_page': 'Về trang chủ',
+    'practice_other_skills': 'Luyện tập kỹ năng khác',
   };
 }

@@ -16,4 +16,5 @@ class RouteNames {
   static const String chatbot = '/chatbot';
   static const String topic = '/topic';
   static const String profile = '/profile';
+  static const String mcqResult = '/mcqResult';
 }

@@ -102,7 +102,7 @@ class _EndFlashCardPageState extends State<EndFlashCardPage> {
                     });
                   },
                   icon: const Icon(Icons.refresh),
-                  label: Text('back_to_first'),
+                  label: Text('back_to_first'.tr),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     textStyle: TextStyles.mediumBold,

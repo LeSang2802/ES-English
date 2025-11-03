@@ -60,5 +60,11 @@ class English {
     'back_to_first': 'Back to the first card.',
     'submit': 'Submit',
     'play_audio': 'Play audio',
+    'result': 'Result',
+    'list_questions_answers': 'List of questions and correct answers',
+    'sentence': 'Sentence',
+    'correct_answer': 'Correct answer',
+    'back_to_home_page': 'Back to home page',
+    'practice_other_skills': 'Practice other skills',
   };
 }
