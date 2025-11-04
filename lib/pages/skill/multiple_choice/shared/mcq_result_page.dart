@@ -104,8 +104,7 @@ class McqResultPage extends StatelessWidget {
                   children: [
                     Text(
                       'list_questions_answers'.tr,
-                      style: TextStyles.mediumBold
-                          .copyWith(color: BgColors.appBar),
+                      style: TextStyles.mediumBold.copyWith(color: BgColors.appBar),
                     ),
                     SizedBox(height: MarginDimens.home),
                     Expanded(

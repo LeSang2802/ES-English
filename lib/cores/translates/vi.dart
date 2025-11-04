@@ -66,5 +66,6 @@ class Vietnamese {
     'correct_answer': 'Đáp án đúng',
     'back_to_home_page': 'Về trang chủ',
     'practice_other_skills': 'Luyện tập kỹ năng khác',
+    'check': 'Kiểm tra',
   };
 }

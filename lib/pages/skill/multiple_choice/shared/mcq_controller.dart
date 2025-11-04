@@ -16,6 +16,7 @@ abstract class McqController extends GetxController {
 
   var selectedOptions = <String, String>{}.obs;
   var questionResults = <String, bool>{}.obs;
+  var checkedQuestions = <String, bool>{}.obs;
 
   var contentList = <String>[].obs;
   var attemptList = <String>[].obs;
@@ -28,7 +29,7 @@ abstract class McqController extends GetxController {
   late String levelId;
   late String topicId;
 
-  // ✅ Thêm: dùng để lưu toàn bộ kết quả các câu đã làm
+  //lưu toàn bộ kết quả các câu đã làm
   final Map<String, Map<String, dynamic>> _resultsForSummary = {};
 
   String get contentType;
@@ -77,6 +78,7 @@ abstract class McqController extends GetxController {
       currentQuestionIndex.value = 0;
       selectedOptions.clear();
       questionResults.clear();
+      checkedQuestions.clear(); //Reset trạng thái kiểm tra
 
       attemptId = await attemptRepo.startAttempt({
         "skill_id": skillId,
@@ -93,6 +95,46 @@ abstract class McqController extends GetxController {
     }
   }
 
+  // === CHỌN ĐÁP ÁN (chưa kiểm tra) ===
+  void onSelectOption(String questionId, String chosenOptionId) {
+    // Chỉ cho phép thay đổi đáp án nếu chưa kiểm tra
+    if (checkedQuestions[questionId] == true) return;
+
+    selectedOptions[questionId] = chosenOptionId;
+    selectedOptions.refresh();
+  }
+
+  // === KIỂM TRA ĐÁP ÁN ===
+  Future<void> checkAnswer(String questionId) async {
+    final chosenOptionId = selectedOptions[questionId];
+    if (chosenOptionId == null || attemptId == null) return;
+
+    // Gọi API kiểm tra đáp án
+    final result = await attemptRepo.answerQuestion(
+      attemptId: attemptId!,
+      questionId: questionId,
+      chosenOptionId: chosenOptionId,
+    );
+
+    final isCorrect = result['is_correct'] ?? false;
+    questionResults[questionId] = isCorrect;
+    checkedQuestions[questionId] = true; //Đánh dấu đã kiểm tra
+
+    questionResults.refresh();
+    checkedQuestions.refresh();
+
+    // Ghi lại kết quả từng câu để hiển thị ở màn kết quả
+    final q = currentData.value?.questions.firstWhereOrNull((x) => x.id == questionId);
+    final chosenOpt = q?.options.firstWhereOrNull((o) => o.id == chosenOptionId);
+    final correctOpt = q?.options.firstWhereOrNull((o) => o.is_correct == true);
+
+    _resultsForSummary[questionId] = {
+      "chosen": chosenOpt?.label ?? '',
+      "correct": correctOpt?.label ?? '',
+      "is_correct": isCorrect,
+    };
+  }
+
   // === ĐIỀU HƯỚNG CÂU HỎI ===
   Future<void> nextQuestion() async {
     final totalQ = currentData.value?.questions.length ?? 0;
@@ -102,9 +144,6 @@ abstract class McqController extends GetxController {
       final next = currentContentIndex.value + 1;
       if (next < contentList.length) {
         await loadContentAtIndex(next);
-      } else {
-        // ✅ Tự động chuyển sang kết quả nếu đã hết bài
-        await submitAll();
       }
     }
   }
@@ -115,35 +154,6 @@ abstract class McqController extends GetxController {
     } else if (currentContentIndex.value > 0) {
       loadContentAtIndex(currentContentIndex.value - 1);
     }
-  }
-
-  // === GỬI ĐÁP ÁN ===
-  Future<void> onSelectOption(String questionId, String chosenOptionId) async {
-    if (selectedOptions.containsKey(questionId)) return;
-    selectedOptions[questionId] = chosenOptionId;
-    selectedOptions.refresh();
-
-    if (attemptId == null) return;
-    final result = await attemptRepo.answerQuestion(
-      attemptId: attemptId!,
-      questionId: questionId,
-      chosenOptionId: chosenOptionId,
-    );
-
-    final isCorrect = result['is_correct'] ?? false;
-    questionResults[questionId] = isCorrect;
-    questionResults.refresh();
-
-    // ✅ Ghi lại kết quả từng câu để hiển thị ở màn kết quả
-    final q = currentData.value?.questions.firstWhereOrNull((x) => x.id == questionId);
-    final chosenOpt = q?.options.firstWhereOrNull((o) => o.id == chosenOptionId);
-    final correctOpt = q?.options.firstWhereOrNull((o) => o.is_correct == true);
-
-    _resultsForSummary[questionId] = {
-      "chosen": chosenOpt?.label ?? '',
-      "correct": correctOpt?.label ?? '',
-      "is_correct": isCorrect,
-    };
   }
 
   String? getCorrectOptionId(String questionId) {
@@ -195,3 +205,4 @@ abstract class McqController extends GetxController {
     }
   }
 }
+

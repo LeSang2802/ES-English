@@ -20,7 +20,7 @@ class McqContentWidget extends StatelessWidget {
         children: [
           Text(
             "📘 ${item?.title ?? ''}",
-            style: TextStyles.mediumBold.copyWith(color: AppColors.primary),
+            style: TextStyles.mediumBold.copyWith(color: BgColors.appBar),
           ),
           const SizedBox(height: 6),
           if (item?.media_image_url != null)

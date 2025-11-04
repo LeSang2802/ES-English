@@ -53,9 +53,6 @@ class TextSizeDimens {
 
 class OtherDimens {
   OtherDimens._();
-
-  static double buttonHeight = 48.h;
   static double appBarHeight = 56.h;
-  static double bottomNavHeight = 64.h;
   static double loadingSize = 32.w;
 }

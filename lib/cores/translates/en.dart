@@ -66,5 +66,6 @@ class English {
     'correct_answer': 'Correct answer',
     'back_to_home_page': 'Back to home page',
     'practice_other_skills': 'Practice other skills',
+    'check': 'Check',
   };
 }
