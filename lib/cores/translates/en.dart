@@ -67,5 +67,14 @@ class English {
     'back_to_home_page': 'Back to home page',
     'practice_other_skills': 'Practice other skills',
     'check': 'Check',
+    'name_required': 'Please enter your name',
+    'name_invalid': 'Name cannot contain numbers or special characters',
+    'age_required': 'Please enter your age',
+    'age_must_be_number': 'Age must be a number',
+    'age_must_be_positive': 'Age must be greater than 0',
+    'age_must_be_less_than_100': 'Age must be less than 100',
+    'occupation_required': 'Please enter your occupation',
+    'occupation_invalid': 'Occupation cannot contain numbers or special characters',
+    'please_check_input': 'Please check your information',
   };
 }

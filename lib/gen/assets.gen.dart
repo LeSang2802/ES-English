@@ -45,6 +45,9 @@ class $AssetsImagesGen {
   AssetGenImage get appIcon =>
       const AssetGenImage('assets/images/app_icon.jpg');
 
+  /// Directory path: assets/images/banners
+  $AssetsImagesBannersGen get banners => const $AssetsImagesBannersGen();
+
   /// File path: assets/images/congra.png
   AssetGenImage get congra => const AssetGenImage('assets/images/congra.png');
 
@@ -133,6 +136,25 @@ class $AssetsImagesAnimalsGen {
   /// List of all assets
   List<AssetGenImage> get values =>
       [bear, cat, dog, elephant, fox, giraffe, horse, monkey, rabbit, tiger];
+}
+
+class $AssetsImagesBannersGen {
+  const $AssetsImagesBannersGen();
+
+  /// File path: assets/images/banners/banner1.jpg
+  AssetGenImage get banner1 =>
+      const AssetGenImage('assets/images/banners/banner1.jpg');
+
+  /// File path: assets/images/banners/banner2.jpg
+  AssetGenImage get banner2 =>
+      const AssetGenImage('assets/images/banners/banner2.jpg');
+
+  /// File path: assets/images/banners/banner3.jpg
+  AssetGenImage get banner3 =>
+      const AssetGenImage('assets/images/banners/banner3.jpg');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [banner1, banner2, banner3];
 }
 
 class Assets {

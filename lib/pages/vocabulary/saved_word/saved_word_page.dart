@@ -80,11 +80,23 @@ class SavedWordPage extends GetView<SavedWordController> {
               ],
             ),
           ),
+          // IconButton(
+          //   onPressed: () => controller.toggleSave(word),
+          //   icon: Icon(
+          //     word.isSaved ? Icons.star : Icons.star_border,
+          //     color: word.isSaved ? AppColors.primary : Colors.grey,
+          //   ),
+          // ),
           IconButton(
             onPressed: () => controller.toggleSave(word),
-            icon: Icon(
-              word.isSaved ? Icons.star : Icons.star_border,
-              color: word.isSaved ? AppColors.primary : Colors.grey,
+            icon: AnimatedSwitcher(
+              duration: Duration(milliseconds: 200),
+              child: Icon(
+                word.isSaved ? Icons.star : Icons.star_border,
+                key: ValueKey<bool>(word.isSaved),
+                color: word.isSaved ? Colors.amber : Colors.grey,
+                size: 28,
+              ),
             ),
           ),
         ],

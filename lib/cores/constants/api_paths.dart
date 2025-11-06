@@ -19,11 +19,12 @@ class ApiPaths {
   /// Lấy nội dung bài học
   static const String content = "/api/admin/content";
 
-  /// Các API Attempt
+  /// Các API Attempt, Result
   static const String attemptStart = "/api/attempts/start";
   static const String attemptAnswer = "/api/attempts/answer";
   static const String attemptSubmit = "/api/attempts/submit";
   static const String attemptProgress = "/api/attempts/me/progress";
+  static const String reciveResult = "/api/results";
 
 
 }

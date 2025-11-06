@@ -17,9 +17,13 @@ class ProfileController extends GetxController {
   final isUploadingAvatar = false.obs;
   final ImagePicker _imagePicker = ImagePicker();
   final CloudinaryService _cloudinaryService = CloudinaryService();
+
   late TextEditingController fullNameController;
   late TextEditingController ageController;
   late TextEditingController occupationController;
+
+  // Form key để validate
+  final formKey = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -27,8 +31,55 @@ class ProfileController extends GetxController {
     fullNameController = TextEditingController();
     ageController = TextEditingController();
     occupationController = TextEditingController();
-
     loadProfile();
+  }
+
+  String? validateFullName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'name_required'.tr;
+    }
+
+    final nameRegex = RegExp(r'^[a-zA-ZÀ-ỹ\s]+$');
+    if (!nameRegex.hasMatch(value)) {
+      return 'name_invalid'.tr;
+    }
+
+    return null;
+  }
+
+  String? validateAge(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'age_required'.tr;
+    }
+
+    final age = int.tryParse(value);
+    if (age == null) {
+      return 'age_must_be_number'.tr;
+    }
+
+    if (age <= 0) {
+      return 'age_must_be_positive'.tr;
+    }
+
+    if (age >= 100) {
+      return 'age_must_be_less_than_100'.tr;
+    }
+
+    return null;
+  }
+
+  String? validateOccupation(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'occupation_required'.tr;
+    }
+
+
+    final occupationRegex = RegExp(r'^[a-zA-ZÀ-ỹ\s]+$');
+    if (!occupationRegex.hasMatch(value)) {
+      return 'occupation_invalid'.tr;
+    }
+
+    return null;
   }
 
   Future<void> loadProfile() async {
@@ -47,7 +98,7 @@ class ProfileController extends GetxController {
 
   Future<void> pickAndUploadAvatar() async {
     final XFile? image =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
+    await _imagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
 
     isUploadingAvatar.value = true;
@@ -68,7 +119,14 @@ class ProfileController extends GetxController {
   }
 
   Future<void> saveProfile() async {
+    // Validate form trước khi lưu
+    if (formKey.currentState == null || !formKey.currentState!.validate()) {
+      Get.snackbar('error'.tr, 'please_check_input'.tr); // "Vui lòng kiểm tra lại thông tin"
+      return;
+    }
+
     if (user.value == null) return;
+
     isSaving.value = true;
     try {
       final updatedUser = await repo.updateProfile(user.value!);

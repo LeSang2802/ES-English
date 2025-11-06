@@ -67,5 +67,14 @@ class Vietnamese {
     'back_to_home_page': 'Về trang chủ',
     'practice_other_skills': 'Luyện tập kỹ năng khác',
     'check': 'Kiểm tra',
+    'name_required': 'Vui lòng nhập họ tên',
+    'name_invalid': 'Họ tên không được chứa số hoặc ký tự đặc biệt',
+    'age_required': 'Vui lòng nhập tuổi',
+    'age_must_be_number': 'Tuổi phải là số',
+    'age_must_be_positive': 'Tuổi phải lớn hơn 0',
+    'age_must_be_less_than_100': 'Tuổi phải nhỏ hơn 100',
+    'occupation_required': 'Vui lòng nhập nghề nghiệp',
+    'occupation_invalid': 'Nghề nghiệp không được chứa số hoặc ký tự đặc biệt',
+    'please_check_input': 'Vui lòng kiểm tra lại thông tin',
   };
 }

@@ -73,6 +73,16 @@ class TopicController extends GetxController {
       });
 
     }
+    else if (skillName.toUpperCase() == "WRITING") {
+      Get.toNamed(RouteNames.writing, arguments: {
+        "skill_id": skillId,
+        "level_id": levelId,
+        "topic_id": topic.id,
+        "skill_name": skillName,
+        "level_name": levelName,
+      });
+
+    }
     else
     {
       Get.snackbar("Chưa hỗ trợ", "Kỹ năng $skillName chưa có màn học.");

@@ -35,6 +35,7 @@ abstract class McqController extends GetxController {
   String get contentType;
 
   Future<McqResponseModel> fetchDetail(String contentId);
+
   Future<List<String>> fetchAllContentIds(String topicId);
 
   @override
@@ -124,8 +125,10 @@ abstract class McqController extends GetxController {
     checkedQuestions.refresh();
 
     // Ghi lại kết quả từng câu để hiển thị ở màn kết quả
-    final q = currentData.value?.questions.firstWhereOrNull((x) => x.id == questionId);
-    final chosenOpt = q?.options.firstWhereOrNull((o) => o.id == chosenOptionId);
+    final q = currentData.value?.questions
+        .firstWhereOrNull((x) => x.id == questionId);
+    final chosenOpt =
+        q?.options.firstWhereOrNull((o) => o.id == chosenOptionId);
     final correctOpt = q?.options.firstWhereOrNull((o) => o.is_correct == true);
 
     _resultsForSummary[questionId] = {
@@ -168,7 +171,7 @@ abstract class McqController extends GetxController {
     return (currentContentIndex.value + 1) / contentList.length;
   }
 
-  // === NỘP TẤT CẢ BÀI ===
+// === NỘP TẤT CẢ BÀI ===
   Future<void> submitAll() async {
     if (_resultsForSummary.isEmpty) {
       Get.snackbar("Chưa có dữ liệu", "Bạn chưa hoàn thành bài nào.");
@@ -177,12 +180,17 @@ abstract class McqController extends GetxController {
 
     isSubmitted.value = true;
     isLoading.value = true;
+
     try {
-      int totalCorrect =
-          _resultsForSummary.values.where((e) => e['is_correct'] == true).length;
+      // Gọi submitAttempt để gửi kết quả lên server
+      final submitResult = await attemptRepo.submitAttempt(attemptId!);
+      // Tính số câu đúng và tổng số câu hỏi
+      int totalCorrect = _resultsForSummary.values
+          .where((e) => e['is_correct'] == true)
+          .length;
       int totalQuestions = _resultsForSummary.length;
 
-      // ✅ Gửi dữ liệu sang màn kết quả
+      // Gửi dữ liệu kết quả sang màn hình kết quả
       final resultList = _resultsForSummary.entries.map((e) {
         final data = e.value;
         return {
@@ -192,6 +200,7 @@ abstract class McqController extends GetxController {
         };
       }).toList();
 
+      // Chuyển đến màn hình kết quả và hiển thị thông tin
       Get.toNamed('/mcqResult', arguments: {
         "totalCorrect": totalCorrect,
         "totalQuestions": totalQuestions,
@@ -205,4 +214,3 @@ abstract class McqController extends GetxController {
     }
   }
 }
-

@@ -17,4 +17,5 @@ class RouteNames {
   static const String topic = '/topic';
   static const String profile = '/profile';
   static const String mcqResult = '/mcqResult';
+  static const String writing = '/writing';
 }
