@@ -6,12 +6,14 @@ import '../../../models/skill/writing/content_item_writing_model.dart';
 import '../../../models/skill/writing/writing_submit_request_model.dart';
 import 'writing_repository.dart';
 
+
 class WritingController extends GetxController {
   final WritingRepository repo = WritingRepository();
 
   var isLoadingQuestion = false.obs;
   var isCheckingAnswer = false.obs;
   var isSubmitting = false.obs;
+  var hasSubmitted = false.obs;
 
   var question = Rxn<ContentItemWriting>();
   var score = Rxn<int>();
@@ -50,7 +52,6 @@ class WritingController extends GetxController {
     try {
       contentIds.value = await repo.getAllContentIdsByTopic(topicId);
       if (contentIds.isNotEmpty) {
-        // Khởi tạo danh sách điểm và feedback
         userScores.value = List.filled(contentIds.length, 0);
         userFeedbacks.value = List.filled(contentIds.length, '');
         await loadWritingQuestion(contentIds[currentIndex]);
@@ -97,7 +98,6 @@ class WritingController extends GetxController {
     textEditingController.clear();
     hasAnsweredCurrent.value = false;
 
-    // Hiển thị lại điểm cũ nếu đã trả lời câu này
     if (userScores[currentIndex] > 0) {
       score.value = userScores[currentIndex];
       comment.value = userFeedbacks[currentIndex];
@@ -212,7 +212,6 @@ Trả về JSON (CHỈ JSON):
 
         print("Gemini response text: $text");
 
-        // Làm sạch JSON từ code block
         String cleanedText = text.trim();
         if (cleanedText.startsWith('```json')) {
           cleanedText = cleanedText.substring(7);
@@ -231,7 +230,6 @@ Trả về JSON (CHỈ JSON):
           final result = jsonDecode(cleanedText);
           int rawScore = result['score'] is int ? result['score'] : 0;
 
-          // Ép kiểu score theo level
           int finalScore;
           if (level == 'BEGINNER') {
             finalScore = (rawScore >= 10) ? 10 : 0;
@@ -242,12 +240,10 @@ Trả về JSON (CHỈ JSON):
           score.value = finalScore;
           comment.value = result['comment'] ?? "Không có nhận xét";
 
-          // LƯU ĐIỂM + FEEDBACK vào danh sách
           userScores[currentIndex] = finalScore;
           userFeedbacks[currentIndex] = result['comment'] ?? "";
           hasAnsweredCurrent.value = true;
 
-          // SnackBar màu theo điểm
           final color = finalScore >= 8
               ? Colors.green.shade100
               : finalScore >= 5
@@ -291,9 +287,9 @@ Trả về JSON (CHỈ JSON):
   }
 
   Future<void> submitResults() async {
-    if (isSubmitting.value) return;
+    // KIỂM TRA hasSubmitted TRƯỚC
+    if (isSubmitting.value || hasSubmitted.value) return;
 
-    // Kiểm tra xem đã trả lời hết chưa
     bool hasUnanswered = false;
     for (int i = 0; i < contentIds.length; i++) {
       if (userScores[i] == 0 && userFeedbacks[i].isEmpty) {
@@ -346,15 +342,17 @@ Trả về JSON (CHỈ JSON):
 
       await repo.receiveResult(request);
 
+      // ĐÁnh DẤU ĐÃ SUBMIT THÀNH CÔNG
+      hasSubmitted.value = true;
+
       Get.snackbar(
         "Thành công",
-        "Đã lưu kết quả! Điểm của bạn: $finalScore/10",
+        "Đã lưu kết quả! Điểm tổng kết của bạn là: $finalScore/10",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green.shade100,
         duration: const Duration(seconds: 3),
       );
 
-      // Delay 1 giây rồi mới back để user đọc được thông báo
       await Future.delayed(const Duration(seconds: 1));
       Get.back();
     } catch (e) {
