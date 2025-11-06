@@ -18,4 +18,6 @@ class RouteNames {
   static const String profile = '/profile';
   static const String mcqResult = '/mcqResult';
   static const String writing = '/writing';
+  static const String speaking = '/speaking';
+  static const String resetPassword = '/reset_password';
 }

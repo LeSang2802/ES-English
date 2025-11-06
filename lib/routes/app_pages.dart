@@ -2,6 +2,8 @@ import 'package:es_english/pages/account/account_binding.dart';
 import 'package:es_english/pages/account/account_page.dart';
 import 'package:es_english/pages/account/profile/profile_binding.dart';
 import 'package:es_english/pages/account/profile/profile_page.dart';
+import 'package:es_english/pages/account/reset_password/reset_password_binding.dart';
+import 'package:es_english/pages/account/reset_password/reset_password_page.dart';
 import 'package:es_english/pages/home/home_binding.dart';
 import 'package:es_english/pages/home/home_page.dart';
 import 'package:es_english/pages/login/login_binding.dart';
@@ -127,6 +129,11 @@ class AppPages {
     GetPage(
       name: RouteNames.mcqResult,
       page: () => McqResultPage(),
+    ),
+    GetPage(
+      name: RouteNames.resetPassword,
+      page: () => const ResetPasswordPage(),
+      binding: ResetPasswordBinding(),
     ),
   ];
 }

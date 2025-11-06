@@ -58,6 +58,8 @@ class AccountPage extends StatelessWidget {
             const SizedBox(height: 16),
             _settingTileProfile(c),
             const SizedBox(height: 12),
+            _settingTileResetPassword(c),
+            const SizedBox(height: 12),
             _settingTileLanguage(c),
             const SizedBox(height: 12),
             _settingTileDarkMode(c),
@@ -182,6 +184,15 @@ class AccountPage extends StatelessWidget {
       title: 'edit_profile'.tr,
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: () => Get.toNamed('/profile'),
+    );
+  }
+
+  Widget _settingTileResetPassword(AccountController c) {
+    return _settingCard(
+      icon: Icons.lock_reset_rounded,
+      title: 'change_password'.tr,
+      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      onTap: () => Get.toNamed('/reset_password'),
     );
   }
 
