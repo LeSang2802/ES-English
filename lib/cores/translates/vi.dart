@@ -12,7 +12,7 @@ class Vietnamese {
     'home_question' : 'Bạn sẽ học gì hôm nay ?',
     'words_start_learning' : 'Hãy bắt đầu học nhé!',
     'introducing_chatbot' : 'Trò chuyện cùng Chatbot',
-    'learned_today' : 'Hôm nay đã học',
+    'learned_this_week' : 'Tuần này đã học',
     'continue_study' : 'Tiếp tục học',
     'title_flashcard_homepage' : 'Học từ vựng với thẻ ghi nhớ',
     'suggestion_flashcard_homepage' : '20 từ mới mỗi ngày',
@@ -90,5 +90,11 @@ class Vietnamese {
     'password_changed_successfully': 'Đổi mật khẩu thành công!',
     'password_change_failed': 'Đổi mật khẩu thất bại',
     'old_password_incorrect': 'Mật khẩu cũ không đúng',
+    'no_progress': 'Chưa có dữ liệu tiến độ',
+    'skills_overview': 'Tổng quan kỹ năng',
+    'learning_progress': 'Tiến độ học tập',
+    'attempts': 'Lượt học',
+    'score': 'Điểm',
+    'study_time': 'Phút học',
   };
 }

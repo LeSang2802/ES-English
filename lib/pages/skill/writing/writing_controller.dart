@@ -132,7 +132,8 @@ class WritingController extends GetxController {
 
     const apiKey = "AIzaSyC2JfnsERoEvyBmGBnEs7oDKhc2Saml3K0";
     final url = Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=$apiKey');
+        // 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=$apiKey');
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey');
     final level = levelName.toUpperCase();
 
     String prompt;

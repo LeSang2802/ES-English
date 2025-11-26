@@ -35,7 +35,7 @@ class McqRepository {
 
   /// Lấy tiến độ tổng hợp người dùng
   Future<Map<String, dynamic>> getMyProgress() async {
-    final res = await _client.get(ApiPaths.attemptProgress);
+    final res = await _client.get(ApiPaths.progress);
     return res.data;
   }
 }

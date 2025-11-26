@@ -24,8 +24,12 @@ class ApiPaths {
   static const String attemptStart = "/api/attempts/start";
   static const String attemptAnswer = "/api/attempts/answer";
   static const String attemptSubmit = "/api/attempts/submit";
-  static const String attemptProgress = "/api/attempts/me/progress";
   static const String reciveResult = "/api/results";
 
+  /// Lấy tiến độ
+  static const String progress = "/api/attempts/me/progress";
+
+  /// Study time
+  static const String studyTime = "/api/time";
 
 }

@@ -161,7 +161,7 @@ class HomePage extends GetView<HomeController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('learned_today'.tr,
+              Text('learned_this_week'.tr,
                   style: TextStyles.small.copyWith(color: Colors.grey[600])),
               // Text('My courses', style: TextStyles.smallBold.copyWith(color: AppColors.primary)),
             ],
@@ -169,10 +169,10 @@ class HomePage extends GetView<HomeController> {
           SizedBox(height: MarginDimens.reading),
           Row(
             children: [
-              Text('${c.learnedTodayMin.value}min',
+              Text('${c.learnedThisWeekMin.value}min',
                   style: TextStyles.largeBold),
               SizedBox(width: MarginDimens.reading),
-              Text('/ ${c.targetMin.value}min',
+              Text('/ ${c.targetWeekMin.value}min',
                   style: TextStyles.small.copyWith(color: Colors.grey)),
             ],
           ),
@@ -180,7 +180,7 @@ class HomePage extends GetView<HomeController> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
-              value: c.progressToday,
+              value: c.progressWeek,
               minHeight: 6,
               color: AppColors.primary,
               backgroundColor: AppColors.primary.withOpacity(0.15),

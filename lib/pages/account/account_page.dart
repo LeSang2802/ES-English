@@ -140,25 +140,20 @@ class AccountPage extends StatelessWidget {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Text(
-                      'Beginner',
-                      style: TextStyles.small.copyWith(color: Colors.grey[700]),
-                    ),
-                  ),
-                  Text('Today',
-                      style: TextStyles.smallBold
-                          .copyWith(color: AppColors.primary)),
+                  Text('learned_this_week'.tr,
+                      style: TextStyles.small.copyWith(color: Colors.grey[600])),
+                  // Text('My courses', style: TextStyles.smallBold.copyWith(color: AppColors.primary)),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: MarginDimens.reading),
               Row(
                 children: [
-                  Text('${c.learnedToday.value}min',
+                  Text('${c.learnedThisWeek.value}min',
                       style: TextStyles.largeBold),
                   const SizedBox(width: 6),
-                  Text('/ ${c.targetToday.value}min',
+                  Text('/ ${c.targetWeek.value}min',
                       style:
                           TextStyles.small.copyWith(color: Colors.grey[600])),
                 ],
@@ -167,7 +162,7 @@ class AccountPage extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
-                  value: c.progressToday,
+                  value: c.progressWeek,
                   minHeight: 6,
                   color: AppColors.primary,
                   backgroundColor: AppColors.primary.withOpacity(0.15),

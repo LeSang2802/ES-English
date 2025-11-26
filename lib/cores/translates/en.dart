@@ -11,7 +11,7 @@ class English {
     'home_question' : 'what will you study today ?',
     'words_start_learning' : "Let's start study !",
     'introducing_chatbot' : 'Chat with Chatbot',
-    'learned_today' : 'Learned today',
+    'learned_this_week' : 'Learned this week',
     'continue_study' : 'Continue study',
     'title_flashcard_homepage' : 'Study vocabulary with FlashCard',
     'suggestion_flashcard_homepage' : '20 new words everyday',
@@ -90,5 +90,11 @@ class English {
     'password_changed_successfully': 'Password changed successfully!',
     'password_change_failed': 'Failed to change password',
     'old_password_incorrect': 'Old password is incorrect',
+    'no_progress': 'No progress data',
+    'skills_overview': 'Skills Overview',
+    'learning_progress': 'Learning Progress',
+    'attempts': 'Attempts',
+    'score': 'Score',
+    'study_time': 'Study Minute',
   };
 }

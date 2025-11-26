@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../models/login/login_request_model.dart';
 import '../../../routes/route_name.dart';
 import '../../constants/local_storage.dart';
+import '../../cores/study_time/study_time_service.dart';
 import 'login_repository.dart';
 
 class LoginController extends GetxController {
@@ -35,6 +36,8 @@ class LoginController extends GetxController {
     if (response != null && response.token != null) {
       _storage.token = response.token;
       _storage.user = response.user;
+
+      await StudyTimeService.to.startSession();
 
       Get.snackbar("Success", "Login successful!");
       Get.offAllNamed(RouteNames.home);

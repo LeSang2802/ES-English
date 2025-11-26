@@ -36,6 +36,58 @@ class LocalStorage {
     return null;
   }
 
+  // ===== STUDY TIME SESSION - THÊM MỚI =====
+
+  // Lưu thời điểm bắt đầu session
+  set sessionStartTime(DateTime? value) {
+    if (value == null) {
+      _box.remove('session_start_time');
+    } else {
+      _box.write('session_start_time', value.toIso8601String());
+    }
+  }
+
+  DateTime? get sessionStartTime {
+    final data = _box.read('session_start_time');
+    if (data != null) {
+      return DateTime.parse(data);
+    }
+    return null;
+  }
+
+  // Tracking status
+  set isTrackingSession(bool value) {
+    _box.write('is_tracking', value);
+  }
+
+  bool get isTrackingSession => _box.read('is_tracking') ?? false;
+
+  // Lưu các session thất bại để retry
+  void addFailedSession(String date, int duration) {
+    List<String> failed = failedSessions;
+    failed.add('$date|$duration');
+    _box.write('failed_sessions', failed);
+  }
+
+  List<String> get failedSessions {
+    final data = _box.read('failed_sessions');
+    if (data is List) {
+      return List<String>.from(data);
+    }
+    return [];
+  }
+
+  void removeFailedSession(String session) {
+    List<String> failed = failedSessions;
+    failed.remove(session);
+    _box.write('failed_sessions', failed);
+  }
+
+  void clearFailedSessions() {
+    _box.remove('failed_sessions');
+  }
+
+
   // ===== CLEAR ALL STORAGE =====
   Future<void> clearAll() async {
     await _box.erase();
