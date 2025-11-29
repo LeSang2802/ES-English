@@ -42,7 +42,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<String> _callGeminiAPI(String prompt) async {
-    const apiKey = "AIzaSyC2JfnsERoEvyBmGBnEs7oDKhc2Saml3K0";
+    const apiKey = "yourAPIKey";
     final url = Uri.parse(
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey',
     );

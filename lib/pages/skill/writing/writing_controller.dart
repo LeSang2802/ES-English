@@ -128,7 +128,7 @@ class WritingController extends GetxController {
 
     isCheckingAnswer.value = true;
 
-    const apiKey = "AIzaSyDvrMJb6R3U25PduK0TW4ITKoynQ6UPSKs";
+    const apiKey = "yourAPIKey";
     final url = Uri.parse(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey');
     final level = levelName.toUpperCase();

@@ -68,7 +68,7 @@ class ProgressController extends GetxController {
     isLoadingSuggestion.value = true;
     aiSuggestion.value = '';
 
-    const apiKey = "AIzaSyCMlfpMhTgPN_2xdamq78DfmQQCmrb7_3M";
+    const apiKey = "yourAPIKey";
     final url = Uri.parse(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey');
 

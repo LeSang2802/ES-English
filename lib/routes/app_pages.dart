@@ -17,6 +17,7 @@ import 'package:es_english/pages/skill/multiple_choice/listening/listening_page.
 import 'package:es_english/pages/skill/multiple_choice/shared/mcq_result_page.dart';
 import 'package:es_english/pages/skill/skill_binding.dart';
 import 'package:es_english/pages/skill/skill_page.dart';
+import 'package:es_english/pages/skill/speaking/speaking_binding.dart';
 import 'package:es_english/pages/skill/writing/writing_binding.dart';
 import 'package:es_english/pages/skill/writing/writing_page.dart';
 import 'package:es_english/pages/test/test_binding.dart';
@@ -36,6 +37,7 @@ import '../pages/level/level_binding.dart';
 import '../pages/level/level_page.dart';
 import '../pages/skill/multiple_choice/reading/reading_binding.dart';
 import '../pages/skill/multiple_choice/reading/reading_page.dart';
+import '../pages/skill/speaking/speaking_page.dart';
 import '../pages/vocabulary/flash_card/end_flash_card_binding.dart';
 import '../pages/vocabulary/flash_card/flash_card_binding.dart';
 import '../pages/vocabulary/saved_word/saved_word_page.dart';
@@ -148,6 +150,11 @@ class AppPages {
       name: RouteNames.testDetail,
       page: () => const TestDetailPage(),
       binding: TestDetailBinding(),
+    ),
+    GetPage(
+      name: RouteNames.speaking,
+      page: () => const SpeakingPage(),
+      binding: SpeakingBinding(),
     ),
   ];
 }
