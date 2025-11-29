@@ -20,4 +20,6 @@ class RouteNames {
   static const String writing = '/writing';
   static const String speaking = '/speaking';
   static const String resetPassword = '/reset_password';
+  static const String test = '/test';
+  static const String testDetail = '/testDetail';
 }

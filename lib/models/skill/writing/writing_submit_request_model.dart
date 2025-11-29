@@ -7,6 +7,7 @@ part 'writing_submit_request_model.g.dart';
 class WritingSubmitRequest with _$WritingSubmitRequest {
   const factory WritingSubmitRequest({
     required String topic_id,
+    required String content_item_id,
     required double score,
     double? band_score,
     String? feedback,

@@ -32,4 +32,9 @@ class ApiPaths {
   /// Study time
   static const String studyTime = "/api/time";
 
+  /// Test / Mock Test
+  static const String test = "/api/admin/tests";
+  static const String testAnswerMulti = "/api/admin/tests/answer-multi";
+  static const String testSubmit = "/api/admin/tests/submit";
+
 }

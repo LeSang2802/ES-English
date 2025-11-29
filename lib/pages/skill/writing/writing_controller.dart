@@ -6,14 +6,12 @@ import '../../../models/skill/writing/content_item_writing_model.dart';
 import '../../../models/skill/writing/writing_submit_request_model.dart';
 import 'writing_repository.dart';
 
-
 class WritingController extends GetxController {
   final WritingRepository repo = WritingRepository();
 
   var isLoadingQuestion = false.obs;
   var isCheckingAnswer = false.obs;
   var isSubmitting = false.obs;
-  var hasSubmitted = false.obs;
 
   var question = Rxn<ContentItemWriting>();
   var score = Rxn<int>();
@@ -130,10 +128,9 @@ class WritingController extends GetxController {
 
     isCheckingAnswer.value = true;
 
-    const apiKey = "AIzaSyC2JfnsERoEvyBmGBnEs7oDKhc2Saml3K0";
+    const apiKey = "AIzaSyDvrMJb6R3U25PduK0TW4ITKoynQ6UPSKs";
     final url = Uri.parse(
-        // 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=$apiKey');
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey');
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey');
     final level = levelName.toUpperCase();
 
     String prompt;
@@ -238,12 +235,21 @@ Trả về JSON (CHỈ JSON):
             finalScore = rawScore.clamp(0, 10);
           }
 
+          // Loại bỏ ký tự đặc biệt từ comment
+          String cleanComment = (result['comment'] ?? "Không có nhận xét")
+              .replaceAll('*', '')
+              .replaceAll('**', '')
+              .trim();
+
           score.value = finalScore;
-          comment.value = result['comment'] ?? "Không có nhận xét";
+          comment.value = cleanComment;
 
           userScores[currentIndex] = finalScore;
-          userFeedbacks[currentIndex] = result['comment'] ?? "";
+          userFeedbacks[currentIndex] = cleanComment;
           hasAnsweredCurrent.value = true;
+
+          // POST ĐIỂM VỀ BACKEND NGAY SAU KHI CHẤM
+          await _submitSingleResult(finalScore, cleanComment);
 
           final color = finalScore >= 8
               ? Colors.green.shade100
@@ -253,7 +259,7 @@ Trả về JSON (CHỈ JSON):
 
           Get.snackbar(
             "Hoàn thành",
-            "Điểm: $finalScore/10",
+            "Điểm: $finalScore/10 - Đã lưu kết quả!",
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: color,
             duration: const Duration(seconds: 3),
@@ -287,85 +293,32 @@ Trả về JSON (CHỈ JSON):
     }
   }
 
-  Future<void> submitResults() async {
-    // KIỂM TRA hasSubmitted TRƯỚC
-    if (isSubmitting.value || hasSubmitted.value) return;
-
-    bool hasUnanswered = false;
-    for (int i = 0; i < contentIds.length; i++) {
-      if (userScores[i] == 0 && userFeedbacks[i].isEmpty) {
-        hasUnanswered = true;
-        break;
-      }
-    }
-
-    if (hasUnanswered) {
-      Get.snackbar(
-        "Cảnh báo",
-        "Bạn chưa trả lời hết các câu hỏi!",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.orange.shade100,
-      );
-      return;
-    }
-
-    isSubmitting.value = true;
-
+  // HÀM MỚI: Post điểm từng câu ngay sau khi chấm
+  Future<void> _submitSingleResult(int scoreValue, String feedback) async {
     try {
-      final total = contentIds.length;
-      final level = levelName.toUpperCase();
-      double finalScore;
-
-      if (level == 'BEGINNER') {
-        final correct = userScores.where((s) => s == 10).length;
-        finalScore = (correct / total) * 10;
-      } else {
-        final sum = userScores.reduce((a, b) => a + b);
-        finalScore = sum / total;
-      }
-
-      finalScore = double.parse(finalScore.toStringAsFixed(1));
-
-      final combinedFeedback = userFeedbacks
-          .asMap()
-          .entries
-          .where((e) => e.value.isNotEmpty)
-          .map((e) => "Câu ${e.key + 1}: ${e.value}")
-          .join("\n\n");
+      final currentContentId = contentIds[currentIndex];
 
       final request = WritingSubmitRequest(
         topic_id: topicId,
-        score: finalScore,
-        feedback: combinedFeedback.isEmpty ? "Không có nhận xét." : combinedFeedback,
+        content_item_id: currentContentId,
+        score: scoreValue.toDouble(),
+        feedback: feedback.isEmpty ? "Không có nhận xét." : feedback,
       );
 
-      print("Submitting result: ${request.toJson()}");
+      print("Submitting single result: ${request.toJson()}");
 
       await repo.receiveResult(request);
 
-      // ĐÁnh DẤU ĐÃ SUBMIT THÀNH CÔNG
-      hasSubmitted.value = true;
-
-      Get.snackbar(
-        "Thành công",
-        "Đã lưu kết quả! Điểm tổng kết của bạn là: $finalScore/10",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.shade100,
-        duration: const Duration(seconds: 3),
-      );
-
-      await Future.delayed(const Duration(seconds: 1));
-      Get.back();
+      print("Single result submitted successfully for content: $currentContentId");
     } catch (e) {
-      print("Error submitting results: $e");
-      Get.snackbar(
-        "Lỗi",
-        "Không thể gửi kết quả: $e",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade100,
-      );
-    } finally {
-      isSubmitting.value = false;
+      print("Error submitting single result: $e");
+      // Không hiện snackbar lỗi ở đây để không làm gián đoạn trải nghiệm người dùng
+      // Lỗi đã được log, có thể xử lý sau nếu cần
     }
+  }
+
+  // CẬP NHẬT: Hàm này giờ chỉ dùng để back về màn hình trước
+  Future<void> finishTopic() async {
+    Get.back();
   }
 }

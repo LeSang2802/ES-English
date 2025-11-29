@@ -15,7 +15,7 @@ class English {
     'continue_study' : 'Continue study',
     'title_flashcard_homepage' : 'Study vocabulary with FlashCard',
     'suggestion_flashcard_homepage' : '20 new words everyday',
-    'daily_challenge': 'Daily Challenge',
+    'test': 'Test',
     'start_now': 'Start Now',
     'choose_topic': 'Choose topic',
     'no_data': 'No data',

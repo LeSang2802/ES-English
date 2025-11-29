@@ -16,7 +16,7 @@ class Vietnamese {
     'continue_study' : 'Tiếp tục học',
     'title_flashcard_homepage' : 'Học từ vựng với thẻ ghi nhớ',
     'suggestion_flashcard_homepage' : '20 từ mới mỗi ngày',
-    'daily_challenge': 'Thử thách mỗi ngày',
+    'test': 'Thi thử',
     'start_now': 'Bắt đầu ngay',
     'choose_topic': 'Chọn chủ đề',
     'no_data': 'Không có dữ liệu',

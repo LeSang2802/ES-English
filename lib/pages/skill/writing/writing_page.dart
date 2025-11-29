@@ -198,6 +198,8 @@ class WritingPage extends StatelessWidget {
     );
   }
 
+  // Trong _buildActionButtons, thay đổi phần cuối:
+
   Widget _buildActionButtons(WritingController controller) {
     return Obx(() {
       final hasScore = controller.score.value != null;
@@ -246,14 +248,19 @@ class WritingPage extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: controller.isSubmitting.value ? null : controller.submitResults,
+                onPressed: controller.finishTopic, // THAY ĐỔI TÊN HÀM
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                child: controller.isSubmitting.value
-                    ? SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                    : Text("Submit Results", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.check_circle),
+                    SizedBox(width: 8),
+                    Text("Finish Topic", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), // THAY ĐỔI TEXT
+                  ],
+                ),
               ),
             ),
         ]);

@@ -17,7 +17,7 @@ class SkillPage extends GetView<SkillController> {
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
-      appBar: BaseAppBar(title: 'Skills', showBackButton: false),
+      appBar: BaseAppBar(title: 'skill'.tr, showBackButton: false),
       bottomNavigationBar: BaseBottomNav(
         currentIndex: 1,
         onTap: (index) {

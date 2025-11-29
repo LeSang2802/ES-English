@@ -277,7 +277,7 @@ class HomePage extends GetView<HomeController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('daily_challenge'.tr, style: TextStyles.mediumBold),
+                    Text('test'.tr, style: TextStyles.mediumBold),
                     SizedBox(height: 4),
                     Text('start_now'.tr,
                         style:

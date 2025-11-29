@@ -31,6 +31,7 @@ class MarginDimens {
   static double large = 16.w;
   static double extra = 24.w;
   static double flashcard = 40.w;
+  static double time = 100.w;
 }
 
 class RadiusDimens {

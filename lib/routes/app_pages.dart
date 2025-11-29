@@ -19,6 +19,10 @@ import 'package:es_english/pages/skill/skill_binding.dart';
 import 'package:es_english/pages/skill/skill_page.dart';
 import 'package:es_english/pages/skill/writing/writing_binding.dart';
 import 'package:es_english/pages/skill/writing/writing_page.dart';
+import 'package:es_english/pages/test/test_binding.dart';
+import 'package:es_english/pages/test/test_detail/test_detail_binding.dart';
+import 'package:es_english/pages/test/test_detail/test_detail_page.dart';
+import 'package:es_english/pages/test/test_page.dart';
 import 'package:es_english/pages/topic/topic_binding.dart';
 import 'package:es_english/pages/topic/topic_page.dart';
 import 'package:es_english/pages/vocabulary/flash_card/end_flash_card_page.dart';
@@ -134,6 +138,16 @@ class AppPages {
       name: RouteNames.resetPassword,
       page: () => const ResetPasswordPage(),
       binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: RouteNames.test,
+      page: () => const TestPage(),
+      binding: TestBinding(),
+    ),
+    GetPage(
+      name: RouteNames.testDetail,
+      page: () => const TestDetailPage(),
+      binding: TestDetailBinding(),
     ),
   ];
 }
