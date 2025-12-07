@@ -169,10 +169,10 @@ class HomePage extends GetView<HomeController> {
           SizedBox(height: MarginDimens.reading),
           Row(
             children: [
-              Text('${c.learnedThisWeekMin.value}min',
+              Text('${c.learnedThisWeekMin.value} ${'min'.tr}',
                   style: TextStyles.largeBold),
               SizedBox(width: MarginDimens.reading),
-              Text('/ ${c.targetWeekMin.value}min',
+              Text('/ ${c.targetWeekMin.value} ${'min'.tr}',
                   style: TextStyles.small.copyWith(color: Colors.grey)),
             ],
           ),
@@ -329,7 +329,7 @@ class HomePage extends GetView<HomeController> {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, color: Colors.grey),
+              // const Icon(Icons.chevron_right, color: Colors.grey),
             ],
           ),
         ),

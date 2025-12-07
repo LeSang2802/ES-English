@@ -17,14 +17,15 @@ class VocabularyPage extends GetView<VocabularyController> {
       isLoading: controller.isLoading,
       isNestedScroll: false,
       backgroundColor: BgColors.main,
-      appBar: BaseAppBar(title: 'vocabulary'.tr,
+      appBar: BaseAppBar(
+        title: 'vocabulary'.tr,
         leadingWidget: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Get.offNamed('/home'),
         ),
       ),
       body: Obx(() {
-        final topics = controller.topics.toList();
+        final topics = controller.filteredTopics.toList();
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -32,8 +33,17 @@ class VocabularyPage extends GetView<VocabularyController> {
             const SizedBox(height: 20),
             Text('choose_topic'.tr, style: TextStyles.mediumBold),
             const SizedBox(height: 12),
+            _buildSearchBar(controller),
+            const SizedBox(height: 16),
             if (topics.isEmpty)
-              Center(child: Text('no_data'.tr)),
+              Center(
+                child: Text(
+                  controller.searchQuery.value.isEmpty
+                      ? 'no_data'.tr
+                      : 'no_results_found'.tr,
+                  style: TextStyles.medium.copyWith(color: Colors.grey),
+                ),
+              ),
             ...topics.map(
                   (topic) => _buildTopicCard(context, topic, controller),
             ),
@@ -43,7 +53,7 @@ class VocabularyPage extends GetView<VocabularyController> {
     );
   }
 
-  /// 🔹 Nút “Từ đã lưu”
+  /// 🔹 Nút "Từ đã lưu"
   Widget _buildSavedButton(VocabularyController controller) {
     return GestureDetector(
       onTap: controller.goToSavedWords,
@@ -69,6 +79,44 @@ class VocabularyPage extends GetView<VocabularyController> {
             ),
             const Icon(Icons.chevron_right, color: Colors.grey),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 🔹 Thanh tìm kiếm
+  Widget _buildSearchBar(VocabularyController controller) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        onChanged: controller.onSearchChanged,
+        decoration: InputDecoration(
+          hintText: 'search_topic'.tr,
+          hintStyle: TextStyles.medium.copyWith(color: Colors.grey[400]),
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          suffixIcon: Obx(() {
+            return controller.searchQuery.value.isNotEmpty
+                ? IconButton(
+              icon: const Icon(Icons.clear, color: Colors.grey),
+              onPressed: controller.clearSearch,
+            )
+                : const SizedBox.shrink();
+          }),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
       ),
     );

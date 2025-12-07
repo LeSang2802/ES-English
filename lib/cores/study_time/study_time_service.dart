@@ -1,11 +1,8 @@
-
-
+import 'dart:async';
 import 'package:es_english/cores/study_time/study_time_repository.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
-
 import '../../constants/local_storage.dart';
+import '../../models/study_time/study_time_request_model.dart';
 
 class StudyTimeService extends GetxService {
   static StudyTimeService get to => Get.find();
@@ -13,71 +10,95 @@ class StudyTimeService extends GetxService {
   final StudyTimeRepository _repository = StudyTimeRepository();
   final LocalStorage _storage = LocalStorage();
 
-  DateTime? _sessionStartTime;
+  Timer? _timer;
+  int _accumulatedSeconds = 0;
   bool _isTracking = false;
 
-  /// Bắt đầu tracking thời gian học
+  static const int POST_INTERVAL_SECONDS = 300; // 5 phút = 300 giây
+
+  /// Bắt đầu tracking và đếm thời gian
   Future<void> startSession() async {
     if (_isTracking) {
       print('⚠️ Session already started');
       return;
     }
 
-    _sessionStartTime = DateTime.now();
     _isTracking = true;
-
-    _storage.sessionStartTime = _sessionStartTime;
     _storage.isTrackingSession = true;
 
-    print('📚 Started tracking study time: $_sessionStartTime');
+    // Khôi phục số giây đã tích lũy (nếu có)
+    _accumulatedSeconds = _storage.accumulatedSeconds ?? 0;
+
+    print('📚 Started tracking study time. Accumulated: $_accumulatedSeconds seconds');
+
+    // Bắt đầu timer đếm mỗi giây
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _accumulatedSeconds++;
+      _storage.accumulatedSeconds = _accumulatedSeconds;
+
+      // Mỗi 5 phút (300 giây), post lên server
+      if (_accumulatedSeconds >= POST_INTERVAL_SECONDS) {
+        _postAndReset();
+      }
+    });
   }
 
-  /// Kết thúc session và POST lên API
+  /// Kết thúc session
   Future<void> endSession() async {
-    if (!_isTracking || _sessionStartTime == null) {
+    if (!_isTracking) {
       print('⚠️ No active session to end');
       return;
     }
 
-    final endTime = DateTime.now();
-    final durationInSeconds = endTime.difference(_sessionStartTime!).inSeconds;
+    _timer?.cancel();
+    _timer = null;
 
-    // Chỉ gửi nếu học >= 5 giây
-    if (durationInSeconds >= 5) {
-      try {
-        final date = _formatDate(endTime);
+    // Nếu có số giây tích lũy < 300s, vẫn lưu lại để lần sau tiếp tục đếm
+    print('⏸️ Session paused. Accumulated: $_accumulatedSeconds seconds (saved for next session)');
 
-        await _repository.postStudyTime(
-          date: date,
-          duration: durationInSeconds,
-        );
-
-        print('✅ Posted study time: $date - $durationInSeconds seconds');
-      } catch (e) {
-        print('❌ Error posting study time: $e');
-        final date = _formatDate(endTime);
-        _storage.addFailedSession(date, durationInSeconds);
-      }
-    } else {
-      print('⏭️ Session too short ($durationInSeconds seconds), skipped');
-    }
-
-    // Reset session
-    _sessionStartTime = null;
     _isTracking = false;
-    _storage.sessionStartTime = null;
     _storage.isTrackingSession = false;
+  }
+
+  /// Post lên server và reset về 0
+  Future<void> _postAndReset() async {
+    try {
+      final date = _formatDate(DateTime.now());
+
+      final request = StudyTimeRequest(
+        date: date,
+        duration: POST_INTERVAL_SECONDS,
+      );
+
+      await _repository.postStudyTime(request);
+
+      print('✅ Posted study time: $date - $POST_INTERVAL_SECONDS seconds');
+
+      // Reset về 0 sau khi post thành công
+      _accumulatedSeconds = 0;
+      _storage.accumulatedSeconds = 0;
+    } catch (e) {
+      print('❌ Error posting study time: $e');
+
+      // Lưu vào failed sessions để retry sau
+      final date = _formatDate(DateTime.now());
+      _storage.addFailedSession(date, POST_INTERVAL_SECONDS);
+
+      // Vẫn reset về 0 để tiếp tục đếm chu kỳ mới
+      _accumulatedSeconds = 0;
+      _storage.accumulatedSeconds = 0;
+    }
   }
 
   /// Khôi phục session nếu app bị kill
   Future<void> restoreSession() async {
     final isTracking = _storage.isTrackingSession;
-    final startTime = _storage.sessionStartTime;
+    final accumulated = _storage.accumulatedSeconds ?? 0;
 
-    if (isTracking && startTime != null) {
-      _sessionStartTime = startTime;
-      _isTracking = true;
-      print('🔄 Restored session from: $_sessionStartTime');
+    if (isTracking) {
+      _accumulatedSeconds = accumulated;
+      _isTracking = false; // Set false để startSession() có thể chạy lại
+      print('🔄 Restored accumulated time: $_accumulatedSeconds seconds');
     }
   }
 
@@ -98,7 +119,12 @@ class StudyTimeService extends GetxService {
         final date = parts[0];
         final duration = int.parse(parts[1]);
 
-        await _repository.postStudyTime(date: date, duration: duration);
+        final request = StudyTimeRequest(
+          date: date,
+          duration: duration,
+        );
+
+        await _repository.postStudyTime(request);
 
         _storage.removeFailedSession(sessionStr);
         print('✅ Retry success: $date - $duration seconds');
@@ -114,8 +140,11 @@ class StudyTimeService extends GetxService {
 
   bool get isTracking => _isTracking;
 
-  int get currentSessionDuration {
-    if (!_isTracking || _sessionStartTime == null) return 0;
-    return DateTime.now().difference(_sessionStartTime!).inSeconds;
+  int get currentAccumulatedSeconds => _accumulatedSeconds;
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 }

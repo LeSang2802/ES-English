@@ -36,24 +36,18 @@ class LocalStorage {
     return null;
   }
 
-  // ===== STUDY TIME SESSION - THÊM MỚI =====
+  /// ===== STUDY TIME SESSION =====
 
-  // Lưu thời điểm bắt đầu session
-  set sessionStartTime(DateTime? value) {
+  // Lưu số giây đã tích lũy
+  set accumulatedSeconds(int? value) {
     if (value == null) {
-      _box.remove('session_start_time');
+      _box.remove('accumulated_seconds');
     } else {
-      _box.write('session_start_time', value.toIso8601String());
+      _box.write('accumulated_seconds', value);
     }
   }
 
-  DateTime? get sessionStartTime {
-    final data = _box.read('session_start_time');
-    if (data != null) {
-      return DateTime.parse(data);
-    }
-    return null;
-  }
+  int? get accumulatedSeconds => _box.read('accumulated_seconds');
 
   // Tracking status
   set isTrackingSession(bool value) {

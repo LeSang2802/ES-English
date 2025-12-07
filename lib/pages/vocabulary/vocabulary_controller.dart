@@ -6,7 +6,9 @@ class VocabularyController extends GetxController {
   final VocabularyRepository repo = VocabularyRepository();
 
   var topics = <TopicResponseModel>[].obs;
+  var filteredTopics = <TopicResponseModel>[].obs;
   var isLoading = false.obs;
+  var searchQuery = ''.obs;
 
   @override
   void onInit() {
@@ -18,11 +20,31 @@ class VocabularyController extends GetxController {
     isLoading.value = true;
     try {
       topics.value = await repo.getFlashcardTopics();
+      filteredTopics.value = topics;
     } catch (e) {
       print("Error load flashcard topics: $e");
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void onSearchChanged(String query) {
+    searchQuery.value = query;
+
+    if (query.isEmpty) {
+      filteredTopics.value = topics;
+    } else {
+      filteredTopics.value = topics.where((topic) {
+        final title = topic.title?.toLowerCase() ?? '';
+        final searchLower = query.toLowerCase();
+        return title.contains(searchLower);
+      }).toList();
+    }
+  }
+
+  void clearSearch() {
+    searchQuery.value = '';
+    filteredTopics.value = topics;
   }
 
   void goToSavedWords() {

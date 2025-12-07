@@ -35,7 +35,7 @@ void main() async {
     return service;
   });
 
-  runApp(MyAppWrapper()); // ← Đổi từ Application() thành MyAppWrapper()
+  runApp(MyAppWrapper());
 }
 
 // Wrapper để handle lifecycle
@@ -92,6 +92,6 @@ class _MyAppWrapperState extends State<MyAppWrapper> with WidgetsBindingObserver
 
   @override
   Widget build(BuildContext context) {
-    return Application(); // ← Application() được wrap ở đây
+    return Application();
   }
 }

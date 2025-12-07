@@ -103,7 +103,8 @@ abstract class McqPage<T extends McqController> extends GetView<T> {
                         ElevatedButton(
                           onPressed: () {
                             if (isLastQuestion) {
-                              controller.submitAll();
+                              // controller.submitAll();
+                              controller.submitCurrentAttempt();
                             } else {
                               controller.nextQuestion();
                             }
@@ -170,9 +171,12 @@ abstract class McqPage<T extends McqController> extends GetView<T> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: OutlinedButton(
+        // onPressed: isChecked
+        //     ? null
+        //     : () => c.onSelectOption(questionId, option.id as String),
         onPressed: isChecked
             ? null
-            : () => c.onSelectOption(questionId, option.id as String),
+            : () => c.onSelectOption(questionId, option.id.toString()), // Thêm .toString()
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: borderColor, width: 1.3),
           backgroundColor: bgColor,

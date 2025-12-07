@@ -35,9 +35,9 @@ class WritingPage extends StatelessWidget {
               SizedBox(height: 20),
 
               // Title
-              Text(question.title ?? 'No Title',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87)),
-              SizedBox(height: 16),
+              // Text(question.title ?? 'No Title',
+              //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87)),
+              // SizedBox(height: 16),
 
               // Image
               if (question.media_image_url != null && question.media_image_url!.isNotEmpty)
@@ -78,15 +78,15 @@ class WritingPage extends StatelessWidget {
         children: [
           Icon(Icons.warning_amber_rounded, size: 64, color: Colors.orange),
           SizedBox(height: 16),
-          Text('No question available.', style: TextStyle(fontSize: 16)),
+          Text('no_question_available'.tr, style: TextStyle(fontSize: 16)),
           SizedBox(height: 16),
-          ElevatedButton(onPressed: () => Get.back(), child: Text('Go Back')),
+          ElevatedButton(onPressed: () => Get.back(), child: Text('come_back'.tr)),
         ],
       ),
     );
   }
 
-  Widget _buildProgress(WritingController controller) {
+    Widget _buildProgress(WritingController controller) {
     if (controller.contentIds.isEmpty) return SizedBox.shrink();
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -94,7 +94,7 @@ class WritingPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Question ${controller.currentIndex + 1} of ${controller.contentIds.length}',
+          Text('${'question'.tr} ${controller.currentIndex + 1} / ${controller.contentIds.length}',
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
           Text('${((controller.currentIndex + 1) / controller.contentIds.length * 100).toStringAsFixed(0)}%',
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade700)),
@@ -105,7 +105,7 @@ class WritingPage extends StatelessWidget {
 
   Widget _buildSingleQuestionNote() {
     return Center(
-      child: Text("Chỉ có 1 câu hỏi trong chủ đề này.",
+      child: Text('only_1_question'.tr,
           style: TextStyle(color: Colors.grey.shade600, fontSize: 13, fontStyle: FontStyle.italic)),
     );
   }
@@ -176,7 +176,7 @@ class WritingPage extends StatelessWidget {
         Row(children: [
           Icon(Icons.edit_note, color: Colors.blue),
           SizedBox(width: 8),
-          Text('Your Answer:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+          Text('your_answer'.tr, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
         ]),
         SizedBox(height: 12),
         TextField(
@@ -184,7 +184,7 @@ class WritingPage extends StatelessWidget {
           onChanged: (v) => controller.userAnswer = v,
           enabled: !controller.hasAnsweredCurrent.value,
           decoration: InputDecoration(
-            hintText: "Enter your answer here...",
+            hintText: 'enter_your_answer'.tr,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Colors.blue, width: 2)),
             filled: true,
@@ -223,7 +223,7 @@ class WritingPage extends StatelessWidget {
                 : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(Icons.check_circle_outline),
               SizedBox(width: 8),
-              Text("Check Answer", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text('check_answer'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ]),
           ),
         );
@@ -236,7 +236,7 @@ class WritingPage extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: controller.isLoadingQuestion.value ? null : controller.nextQuestion,
                 icon: Icon(Icons.arrow_forward),
-                label: Text("Next Question"),
+                label: Text('next_question'.tr),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
@@ -258,7 +258,7 @@ class WritingPage extends StatelessWidget {
                   children: [
                     Icon(Icons.check_circle),
                     SizedBox(width: 8),
-                    Text("Finish Topic", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), // THAY ĐỔI TEXT
+                    Text('finish_topic'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), // THAY ĐỔI TEXT
                   ],
                 ),
               ),
@@ -288,7 +288,7 @@ class WritingPage extends StatelessWidget {
             ),
             SizedBox(width: 16),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Your Score', style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
+              Text('your_score'.tr, style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
               Text('${controller.score.value}/10', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
             ]),
           ]),
@@ -298,7 +298,7 @@ class WritingPage extends StatelessWidget {
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Icon(Icons.comment, color: Colors.blue.shade700),
             SizedBox(width: 8),
-            Text('Feedback:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+            Text('feedback'.tr, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
           ]),
           SizedBox(height: 8),
           Text(controller.comment.value ?? '', style: TextStyle(fontSize: 15, height: 1.6, color: Colors.black87)),

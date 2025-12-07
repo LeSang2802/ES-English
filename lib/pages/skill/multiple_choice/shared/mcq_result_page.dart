@@ -16,6 +16,9 @@ class McqResultPage extends StatelessWidget {
     final int totalQuestions = args['totalQuestions'] ?? 0;
     final List resultList = args['resultList'] ?? [];
 
+    final int score = totalCorrect * 10;
+    final int maxScore = totalQuestions * 10;
+
     final percent = totalQuestions == 0
         ? 0.0
         : ((totalCorrect / totalQuestions) * 100).clamp(0, 100);
@@ -63,7 +66,8 @@ class McqResultPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${'result'.tr}: $totalCorrect/$totalQuestions",
+                    // "${'result'.tr}: $totalCorrect/$totalQuestions",
+                    "${'result'.tr}: $score/$maxScore ${'score'.tr}",
                     style: TextStyles.mediumBold,
                   ),
                   Container(

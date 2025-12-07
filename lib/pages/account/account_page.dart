@@ -61,8 +61,8 @@ class AccountPage extends StatelessWidget {
             _settingTileResetPassword(c),
             const SizedBox(height: 12),
             _settingTileLanguage(c),
-            const SizedBox(height: 12),
-            _settingTileDarkMode(c),
+            // const SizedBox(height: 12),
+            // _settingTileDarkMode(c),
             const SizedBox(height: 12),
             _settingTileLogout(c),
           ],
@@ -150,10 +150,10 @@ class AccountPage extends StatelessWidget {
               SizedBox(height: MarginDimens.reading),
               Row(
                 children: [
-                  Text('${c.learnedThisWeek.value}min',
+                  Text('${c.learnedThisWeek.value} ${'min'.tr}',
                       style: TextStyles.largeBold),
                   const SizedBox(width: 6),
-                  Text('/ ${c.targetWeek.value}min',
+                  Text('/ ${c.targetWeek.value} ${'min'.tr}',
                       style:
                           TextStyles.small.copyWith(color: Colors.grey[600])),
                 ],

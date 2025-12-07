@@ -14,8 +14,23 @@ class ContentItemSpeaking with _$ContentItemSpeaking {
     String? media_audio_url,
     String? media_image_url,
     bool? is_published,
+    @Default([]) List<SpeakingQuestion> questions,
   }) = _ContentItemSpeaking;
 
   factory ContentItemSpeaking.fromJson(Map<String, dynamic> json) =>
       _$ContentItemSpeakingFromJson(json);
+}
+
+@freezed
+class SpeakingQuestion with _$SpeakingQuestion {
+  const factory SpeakingQuestion({
+    @JsonKey(name: '_id') String? id,
+    String? question_type,
+    String? question_text,
+    int? order_in_item,
+    @Default([]) List<String> options,
+  }) = _SpeakingQuestion;
+
+  factory SpeakingQuestion.fromJson(Map<String, dynamic> json) =>
+      _$SpeakingQuestionFromJson(json);
 }

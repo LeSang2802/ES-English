@@ -11,7 +11,7 @@ class AccountController extends GetxController {
   final LocalStorage _storage = LocalStorage();
   final Rxn<UserModel> user = Rxn<UserModel>();
   final RxInt learnedThisWeek = 0.obs;
-  final RxInt targetWeek = 120.obs;
+  final RxInt targetWeek = 360.obs;
   final RxBool isDarkMode = false.obs;
 
   @override
@@ -40,7 +40,6 @@ class AccountController extends GetxController {
   }
 
   Future<void> logout() async {
-
     await StudyTimeService.to.endSession();
     await _storage.clearAll();
 
@@ -63,8 +62,6 @@ class AccountController extends GetxController {
 
   String get currentLangCode =>
       languageController.currentLocale.value.languageCode;
-
-  // double get progressToday => progressWeek;
 
   double get progressWeek => (targetWeek.value == 0)
       ? 0

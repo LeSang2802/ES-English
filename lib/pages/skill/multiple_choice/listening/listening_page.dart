@@ -22,20 +22,12 @@ class ListeningPage extends McqPage<ListeningController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "🎧 ${item.title ?? ''}",
-            style: TextStyles.mediumBold.copyWith(color: AppColors.primary),
-          ),
+          // Text(
+          //   "🎧 ${item.title ?? ''}",
+          //   style: TextStyles.mediumBold.copyWith(color: AppColors.textDark),
+          // ),
           SizedBox(height: MarginDimens.reading),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: controller.totalProgress,
-              color: AppColors.primary,
-              backgroundColor: Colors.grey.shade300,
-              minHeight: 8,
-            ),
-          ),
+          _buildProgress(controller),
           SizedBox(height: MarginDimens.large),
         ],
       ),
@@ -48,14 +40,12 @@ class ListeningPage extends McqPage<ListeningController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             header,
-            if (item.media_image_url != null)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: MarginDimens.large),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(item.media_image_url!),
-                ),
+            if (item?.media_image_url != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(item!.media_image_url!),
               ),
+            if (item?.media_image_url != null) SizedBox(height: MarginDimens.large),
             SizedBox(height: MarginDimens.listening),
             if (item.media_audio_url != null)
               _AudioCard(url: item.media_audio_url!),
@@ -74,12 +64,20 @@ class ListeningPage extends McqPage<ListeningController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             header,
+            if (item?.media_image_url != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(item!.media_image_url!),
+              ),
+            if (item?.media_image_url != null) SizedBox(height: MarginDimens.large),
             if (item.media_audio_url != null)
               _AudioCard(url: item.media_audio_url!),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: MarginDimens.large),
-              child: Text(item.body_text ?? '',
-                  style: TextStyles.normal.copyWith(height: 1.5)),
+              child: Text(
+                item.body_text ?? '',
+                style: TextStyles.normal.copyWith(height: 1.5),
+              ),
             ),
           ],
         );
@@ -90,16 +88,54 @@ class ListeningPage extends McqPage<ListeningController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             header,
+            if (item?.media_image_url != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(item!.media_image_url!),
+              ),
+            if (item?.media_image_url != null) SizedBox(height: MarginDimens.large),
             if (item.media_audio_url != null)
               _AudioCard(url: item.media_audio_url!),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: MarginDimens.large),
-              child: Text(item.body_text ?? '',
-                  style: TextStyles.normal.copyWith(height: 1.5)),
+              child: Text(
+                item.body_text ?? '',
+                style: TextStyles.normal.copyWith(height: 1.5),
+              ),
             ),
           ],
         );
     }
+  }
+
+  Widget _buildProgress(ListeningController controller) {
+    if (controller.contentList.isEmpty) return SizedBox.shrink();
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '${'question'.tr} ${controller.currentContentIndex.value + 1} / ${controller.contentList.length}',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.blue.shade900,
+            ),
+          ),
+          Text(
+            '${((controller.currentContentIndex.value + 1) / controller.contentList.length * 100).toStringAsFixed(0)}%',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.blue.shade700,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -153,4 +189,3 @@ class _AudioCardState extends State<_AudioCard> {
     );
   }
 }
-

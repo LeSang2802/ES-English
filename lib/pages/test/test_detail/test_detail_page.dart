@@ -18,31 +18,61 @@ class TestDetailPage extends GetView<TestDetailController> {
       isNestedScroll: false,
       appBar: BaseAppBar(
         title: controller.testTitle,
-        actionWidget: Row(                     // chỉ nhận 1 Widget
+        actionWidget: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(() => Padding(
-              padding: const EdgeInsets.only(right: 24),
-              child: Center(
-                child: Text(
-                  controller.formattedTime,
-                  style: TextStyles.largeBold.copyWith(
-                    color: Colors.red,
-                    fontSize: 16,
-                  ),
+            const SizedBox(width: 8),
+            // Đồng hồ + thời gian
+            Obx(() {
+              final isRunningOut = controller.timeRemaining.value <= 120; // còn ≤ 2 phút
+              return Padding(
+                padding: const EdgeInsets.only(right: 24),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedOpacity(
+                      opacity: isRunningOut && (controller.timeRemaining.value % 2 == 0) ? 0.3 : 1.0,
+                      duration: const Duration(milliseconds: 500),
+                      child: Icon(
+                        Icons.access_time_filled,
+                        color: isRunningOut ? Colors.red : Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      controller.formattedTime,
+                      style: TextStyles.largeBold.copyWith(
+                        color: isRunningOut ? Colors.red : Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        shadows: isRunningOut
+                            ? [
+                          const Shadow(
+                            color: Colors.red,
+                            blurRadius: 8,
+                          )
+                        ]
+                            : null,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            )),
+              );
+            }),
+
+            // Nút danh sách câu hỏi
             IconButton(
-              icon: const Icon(Icons.list, color: Colors.white),
+              icon: const Icon(Icons.format_list_numbered, color: Colors.white),
               onPressed: controller.showQuestionList,
+              tooltip: 'list_of_questions'.tr,
             ),
           ],
         ),
       ),
       body: Obx(() {
         if (controller.questions.isEmpty) {
-          return const Center(child: Text('Không có câu hỏi'));
+          return Center(child: Text('no_data'.tr));
         }
 
         final currentQuestion = controller.questions[controller.currentQuestionIndex.value];
@@ -61,14 +91,14 @@ class TestDetailPage extends GetView<TestDetailController> {
                   children: [
                     // Câu hỏi
                     Text(
-                      'Câu ${controller.currentQuestionIndex.value + 1}: ${question?.questionText ?? ''}',
+                      '${'sentence'.tr} ${controller.currentQuestionIndex.value + 1}: ${question?.questionText ?? ''}',
                       style: TextStyles.largeBold,
                     ),
                     SizedBox(height: OtherDimens.appBarHeight),
 
                     // Chọn câu trả lời đúng:
                     Text(
-                      'Chọn câu trả lời đúng:',
+                      'choose_the_correct_answer'.tr,
                       style: TextStyles.mediumBold,
                     ),
                     SizedBox(height: MarginDimens.large),
@@ -163,22 +193,22 @@ class TestDetailPage extends GetView<TestDetailController> {
                         onPressed: () {
                           Get.dialog(
                             AlertDialog(
-                              title: const Text('Nộp bài'),
+                              title: Text('submit'.tr),
                               content: Text(
-                                'Bạn đã trả lời ${controller.answeredCount}/${controller.totalQuestions} câu.\n'
-                                    'Bạn có chắc muốn nộp bài?',
+                                ' ${'you_answered'.tr} ${controller.answeredCount}/${controller.totalQuestions} ${'sentence'.tr}.\n'
+                                    '${'are_you_sure_you_want_to_submit'.tr}',
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Get.back(),
-                                  child: const Text('Hủy'),
+                                  child: Text('cancel'.tr),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
                                     Get.back();
                                     controller.submitTest();
                                   },
-                                  child: const Text('Nộp bài'),
+                                  child: Text('submit'.tr),
                                 ),
                               ],
                             ),
@@ -191,8 +221,8 @@ class TestDetailPage extends GetView<TestDetailController> {
                             vertical: 12,
                           ),
                         ),
-                        child: const Text(
-                          'Nộp bài',
+                        child: Text(
+                          'submit'.tr,
                           style: TextStyle(color: Colors.white),
                         ),
                       );

@@ -72,8 +72,8 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
               if (controller.contentIds.length == 1) _buildSingleQuestionNote(),
               SizedBox(height: 20),
 
-              // Title
-              Text(question.title ?? 'No Title',
+              // Title - Hiển thị body_text
+              Text(question.body_text ?? 'No instruction provided.',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87)),
               SizedBox(height: 16),
 
@@ -83,8 +83,8 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
               if (question.media_image_url != null && question.media_image_url!.isNotEmpty)
                 SizedBox(height: 16),
 
-              // Body Text
-              _buildBodyText(question.body_text),
+              // Body Text - Hiển thị question_text
+              _buildQuestionText(controller),
               SizedBox(height: 16),
 
               // Audio Player (if available)
@@ -134,7 +134,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Question ${controller.currentIndex + 1} of ${controller.contentIds.length}',
+          Text('${'question'.tr} ${controller.currentIndex + 1} / ${controller.contentIds.length}',
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
           Text('${((controller.currentIndex + 1) / controller.contentIds.length * 100).toStringAsFixed(0)}%',
               style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade700)),
@@ -145,7 +145,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
 
   Widget _buildSingleQuestionNote() {
     return Center(
-      child: Text("Chỉ có 1 câu hỏi trong chủ đề này.",
+      child: Text('only_1_question'.tr,
           style: TextStyle(color: Colors.grey.shade600, fontSize: 13, fontStyle: FontStyle.italic)),
     );
   }
@@ -176,15 +176,25 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
     );
   }
 
-  Widget _buildBodyText(String? text) {
+  // Hiển thị question_text
+  Widget _buildQuestionText(SpeakingController controller) {
+    final question = controller.question.value;
+
+    // Lấy question_text từ danh sách questions
+    String displayText = question?.questions.isNotEmpty == true
+        ? (question!.questions.first.question_text ?? 'No question text provided.')
+        : 'No question text provided.';
+
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
           color: Colors.grey.shade50,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade300)),
-      child: Text(text ?? 'No body text provided.',
-          style: TextStyle(fontSize: 16, height: 1.5, color: Colors.black87)),
+      child: Text(
+        displayText,
+        style: TextStyle(fontSize: 16, height: 1.5, color: Colors.black87),
+      ),
     );
   }
 
@@ -222,7 +232,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Audio Sample',
+                  'audio_sample'.tr,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -231,7 +241,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
                 ),
                 SizedBox(height: 4),
                 Text(
-                  isPlayingAudio.value ? 'Playing...' : 'Tap to play',
+                  isPlayingAudio.value ? 'playing'.tr : 'tap_to_play'.tr,
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.purple.shade700,
@@ -271,7 +281,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
                 Icon(Icons.mic, color: Colors.red.shade700, size: 28),
                 SizedBox(width: 12),
                 Text(
-                  'Your Speaking Answer',
+                  'your_speaking_answer'.tr,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -288,7 +298,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
                   CircularProgressIndicator(color: Colors.red),
                   SizedBox(height: 12),
                   Text(
-                    'Đang chấm điểm...',
+                    'scoring'.tr,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.red.shade700,
@@ -342,7 +352,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
                     Icon(Icons.check_circle, color: Colors.green, size: 32),
                     SizedBox(width: 12),
                     Text(
-                      'Đã hoàn thành',
+                      'completed'.tr,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -357,8 +367,8 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
               SizedBox(height: 16),
               Text(
                 isRecording
-                    ? 'Đang ghi âm... Nhấn để dừng'
-                    : 'Nhấn vào micro để bắt đầu ghi âm',
+                    ? 'press_to_stop'.tr
+                    : 'click_on_the_microphone'.tr,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.red.shade700,
@@ -389,7 +399,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
               child: ElevatedButton.icon(
                 onPressed: controller.isLoadingQuestion.value ? null : controller.nextQuestion,
                 icon: Icon(Icons.arrow_forward),
-                label: Text("Next Question"),
+                label: Text('next_question'.tr),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     foregroundColor: Colors.white,
@@ -411,7 +421,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
                   children: [
                     Icon(Icons.check_circle),
                     SizedBox(width: 8),
-                    Text("Finish Topic", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text('finish_topic'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -444,7 +454,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
             ),
             SizedBox(width: 16),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Your Score', style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
+              Text('your_score'.tr, style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
               Text('${controller.score.value}/10',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
             ]),
@@ -455,7 +465,7 @@ class _SpeakingPageState extends State<SpeakingPage> with TickerProviderStateMix
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Icon(Icons.comment, color: Colors.blue.shade700),
             SizedBox(width: 8),
-            Text('Feedback:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
+            Text('feedback'.tr, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue.shade900)),
           ]),
           SizedBox(height: 8),
           Text(controller.comment.value ?? '', style: TextStyle(fontSize: 15, height: 1.6, color: Colors.black87)),

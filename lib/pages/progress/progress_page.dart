@@ -1,417 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:fl_chart/fl_chart.dart';
-// import '../../cores/constants/colors.dart';
-// import '../../cores/constants/dimens.dart';
-// import '../../cores/constants/text_styles.dart';
-// import '../../cores/widgets/base_app_bar.dart';
-// import '../../cores/widgets/base_bottom_nav.dart';
-// import '../../cores/widgets/base_page.dart';
-// import '../../models/progress/progress_response_model.dart';
-// import 'progress_controller.dart';
-//
-// class ProgressPage extends StatelessWidget {
-//   const ProgressPage({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final c = Get.put(ProgressController());
-//
-//     return BasePage(
-//       isLoading: c.isLoading,
-//       isNestedScroll: false,
-//       appBar: BaseAppBar(title: 'progress'.tr, showBackButton: false),
-//       bottomNavigationBar: BaseBottomNav(
-//         currentIndex: 2,
-//         onTap: (index) {
-//           switch (index) {
-//             case 0:
-//               Get.offAllNamed('/home');
-//               break;
-//             case 1:
-//               Get.offAllNamed('/skill');
-//               break;
-//             case 2:
-//               break;
-//             case 3:
-//               Get.offAllNamed('/account');
-//               break;
-//           }
-//         },
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         backgroundColor: AppColors.bottom,
-//         elevation: 3,
-//         shape: const CircleBorder(),
-//         onPressed: () => Get.toNamed('/search'),
-//         child: const Icon(Icons.search, color: AppColors.primary, size: 28),
-//       ),
-//       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//       body: Obx(() {
-//         final skillsSummary = c.skillsSummary;
-//         final progressItems = c.progressData.value?.progress ?? [];
-//
-//         // Empty state đơn giản
-//         if (skillsSummary.isEmpty && progressItems.isEmpty) {
-//           return Center(child: Text('no_progress'.tr));
-//         }
-//
-//         return RefreshIndicator(
-//           onRefresh: c.loadProgress,
-//           child: SingleChildScrollView(
-//             physics: AlwaysScrollableScrollPhysics(),
-//             padding: EdgeInsets.only(
-//               left: MarginDimens.large,
-//               right: MarginDimens.large,
-//               bottom: MarginDimens.large + 80,
-//             ),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 SizedBox(height: MarginDimens.large),
-//
-//                 // Pie Chart
-//                 if (skillsSummary.isNotEmpty) ...[
-//                   _SkillsPieChart(skills: skillsSummary),
-//                   SizedBox(height: MarginDimens.large),
-//                 ],
-//
-//                 // Thống kê
-//                 if (c.progressData.value != null) ...[
-//                   _ProgressStats(data: c.progressData.value!),
-//                   SizedBox(height: MarginDimens.large),
-//                 ],
-//
-//                 // Danh sách progress
-//                 if (progressItems.isNotEmpty) ...[
-//                   Text('learning_progress'.tr, style: TextStyles.largeBold),
-//                   SizedBox(height: MarginDimens.normal),
-//                   ListView.builder(
-//                     shrinkWrap: true,
-//                     physics: const NeverScrollableScrollPhysics(),
-//                     itemCount: progressItems.length,
-//                     itemBuilder: (_, index) => _ProgressListItem(
-//                       item: progressItems[index],
-//                       onTap: () => c.onTapContinue(progressItems[index]),
-//                     ),
-//                   ),
-//                 ],
-//               ],
-//             ),
-//           ),
-//         );
-//       }),
-//     );
-//   }
-// }
-//
-// // Pie Chart Widget
-// class _SkillsPieChart extends StatelessWidget {
-//   final List<SkillSummary> skills;
-//
-//   const _SkillsPieChart({required this.skills});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final colors = [
-//       Color(0xFF4285F4), // Blue - Listening
-//       Color(0xFF34A853), // Green - Reading
-//       Color(0xFFFBBC04), // Yellow - Speaking
-//       Color(0xFFEA4335), // Red - Writing
-//     ];
-//
-//     // Tính tổng điểm của tất cả kỹ năng
-//     final totalScore = skills.fold<int>(0, (sum, skill) => sum + (skill.totalScore ?? 0));
-//
-//     return Container(
-//       padding: const EdgeInsets.all(20),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(16),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.05),
-//             blurRadius: 8,
-//             offset: const Offset(0, 2),
-//           ),
-//         ],
-//       ),
-//       child: Column(
-//         children: [
-//           Text('skills_overview'.tr, style: TextStyles.largeBold),
-//           SizedBox(height: 20),
-//
-//           SizedBox(
-//             height: 220,
-//             child: PieChart(
-//               PieChartData(
-//                 sectionsSpace: 3,
-//                 centerSpaceRadius: 60,
-//                 sections: skills.asMap().entries.map((entry) {
-//                   final index = entry.key;
-//                   final skill = entry.value;
-//                   // Tính phần trăm = (total_score của skill / tổng điểm) x 100
-//                   final percent = totalScore > 0
-//                       ? ((skill.totalScore ?? 0) / totalScore * 100).round()
-//                       : 0;
-//
-//                   return PieChartSectionData(
-//                     color: colors[index % colors.length],
-//                     value: percent > 0 ? percent.toDouble() : 1,
-//                     title: '$percent%',
-//                     radius: 65,
-//                     titleStyle: const TextStyle(
-//                       fontSize: 16,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.white,
-//                     ),
-//                   );
-//                 }).toList(),
-//               ),
-//             ),
-//           ),
-//
-//           SizedBox(height: 20),
-//
-//           // Legend
-//           Wrap(
-//             spacing: 20,
-//             runSpacing: 12,
-//             alignment: WrapAlignment.center,
-//             children: skills.asMap().entries.map((entry) {
-//               final index = entry.key;
-//               final skill = entry.value;
-//               return Row(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Container(
-//                     width: 16,
-//                     height: 16,
-//                     decoration: BoxDecoration(
-//                       color: colors[index % colors.length],
-//                       shape: BoxShape.circle,
-//                     ),
-//                   ),
-//                   const SizedBox(width: 8),
-//                   Text(
-//                     _getSkillDisplayName(skill.skill ?? ''),
-//                     style: TextStyles.small.copyWith(fontWeight: FontWeight.w600),
-//                   ),
-//                 ],
-//               );
-//             }).toList(),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   String _getSkillDisplayName(String code) {
-//     switch (code.toUpperCase()) {
-//       case 'LISTENING':
-//         return 'Listening';
-//       case 'READING':
-//         return 'Reading';
-//       case 'SPEAKING':
-//         return 'Speaking';
-//       case 'WRITING':
-//         return 'Writing';
-//       default:
-//         return code;
-//     }
-//   }
-// }
-//
-// // Thống kê tổng quan
-// class _ProgressStats extends StatelessWidget {
-//   final ProgressResponseModel data;
-//
-//   const _ProgressStats({required this.data});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(16),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(16),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.05),
-//             blurRadius: 8,
-//             offset: const Offset(0, 2),
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         children: [
-//           Expanded(
-//             child: _StatItem(
-//               icon: Icons.assignment_turned_in,
-//               label: 'attempts'.tr,
-//               value: '${data.totalUserAttempts ?? 0}',
-//               color: Colors.blue,
-//             ),
-//           ),
-//           Container(width: 1, height: 40, color: Colors.grey[300]),
-//           Expanded(
-//             child: _StatItem(
-//               icon: Icons.stars,
-//               label: 'score'.tr,
-//               value: '${data.totalUserScore ?? 0}',
-//               color: Colors.orange,
-//             ),
-//           ),
-//           Container(width: 1, height: 40, color: Colors.grey[300]),
-//           Expanded(
-//             child: _StatItem(
-//               icon: Icons.timer,
-//               label: 'study_time'.tr,
-//               value: '${((data.studyTime?.total7Days ?? 0) / 60).toStringAsFixed(0)}',
-//               color: Colors.green,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-// class _StatItem extends StatelessWidget {
-//   final IconData icon;
-//   final String label;
-//   final String value;
-//   final Color color;
-//
-//   const _StatItem({
-//     required this.icon,
-//     required this.label,
-//     required this.value,
-//     required this.color,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Icon(icon, color: color, size: 28),
-//         SizedBox(height: 8),
-//         Text(value, style: TextStyles.mediumBold),
-//         Text(label, style: TextStyles.small.copyWith(color: Colors.grey[600])),
-//       ],
-//     );
-//   }
-// }
-//
-// // Progress List Item
-// class _ProgressListItem extends StatelessWidget {
-//   final ProgressItem item;
-//   final VoidCallback onTap;
-//
-//   const _ProgressListItem({required this.item, required this.onTap});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final percent = item.progressPercent ?? 0;
-//
-//     return Container(
-//       margin: EdgeInsets.only(bottom: 12),
-//       padding: const EdgeInsets.all(16),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(12),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black.withOpacity(0.03),
-//             blurRadius: 4,
-//             offset: const Offset(0, 2),
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         children: [
-//           // Progress Circle
-//           SizedBox(
-//             width: 50,
-//             height: 50,
-//             child: Stack(
-//               alignment: Alignment.center,
-//               children: [
-//                 CircularProgressIndicator(
-//                   value: percent / 100,
-//                   strokeWidth: 5,
-//                   color: AppColors.primary,
-//                   backgroundColor: AppColors.primary.withOpacity(0.15),
-//                 ),
-//                 Text(
-//                   '$percent%',
-//                   style: const TextStyle(
-//                     fontSize: 12,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//
-//           SizedBox(width: 16),
-//
-//           // Content
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   item.skillName ?? 'Unknown',
-//                   style: TextStyles.mediumBold,
-//                 ),
-//                 SizedBox(height: 4),
-//                 Text(
-//                   item.topicTitle ?? '',
-//                   style: TextStyles.small.copyWith(color: Colors.grey[600]),
-//                   maxLines: 1,
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//                 SizedBox(height: 4),
-//                 Row(
-//                   children: [
-//                     Container(
-//                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-//                       decoration: BoxDecoration(
-//                         color: AppColors.primary.withOpacity(0.1),
-//                         borderRadius: BorderRadius.circular(4),
-//                       ),
-//                       child: Text(
-//                         item.level ?? '',
-//                         style: TextStyles.small.copyWith(
-//                           color: AppColors.primary,
-//                           fontWeight: FontWeight.w600,
-//                         ),
-//                       ),
-//                     ),
-//                     SizedBox(width: 8),
-//                     Text(
-//                       '${item.totalQuestions}/${item.totalLessons} ${"lesson".tr}',
-//                       style: TextStyles.small.copyWith(color: Colors.grey[600]),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//
-//           // Continue Button
-//           IconButton(
-//             onPressed: onTap,
-//             icon: Icon(Icons.arrow_forward_ios, size: 18),
-//             color: AppColors.primary,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -462,16 +48,12 @@ class ProgressPage extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Obx(() {
-        final skillsSummary = c.skillsSummary;
-        final progressItems = c.progressData.value?.progress ?? [];
-
-        // Empty state đơn giản
-        if (skillsSummary.isEmpty && progressItems.isEmpty) {
+        if (!c.hasData) {
           return Center(child: Text('no_progress'.tr));
         }
 
         return RefreshIndicator(
-          onRefresh: c.loadProgress,
+          onRefresh: c.refreshAllData,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.only(
@@ -485,20 +67,18 @@ class ProgressPage extends StatelessWidget {
                 SizedBox(height: MarginDimens.large),
 
                 // Pie Chart
-                if (skillsSummary.isNotEmpty) ...[
-                  _SkillsPieChart(skills: skillsSummary),
+                if (c.skillsSummary.isNotEmpty) ...[
+                  _SkillsPieChart(controller: c),
                   SizedBox(height: MarginDimens.large),
                 ],
 
-                // Thống kê
+                // Stats
                 if (c.progressData.value != null) ...[
-                  _ProgressStats(data: c.progressData.value!),
+                  _ProgressStats(controller: c),
                   SizedBox(height: MarginDimens.large),
                 ],
 
-                // ============================================
-                // NÚT GỢI Ý LỘ TRÌNH TỪ AI - THÊM MỚI
-                // ============================================
+                // AI Suggestion Button
                 if (c.progressData.value != null) ...[
                   SizedBox(
                     width: double.infinity,
@@ -510,7 +90,7 @@ class ProgressPage extends StatelessWidget {
                       },
                       icon: Icon(Icons.auto_awesome, color: Colors.white),
                       label: Text(
-                        'Gợi ý lộ trình từ AI',
+                        'suggestions_from_AI'.tr,
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -522,20 +102,173 @@ class ProgressPage extends StatelessWidget {
                   SizedBox(height: MarginDimens.large),
                 ],
 
-                // Danh sách progress
-                if (progressItems.isNotEmpty) ...[
-                  Text('learning_progress'.tr, style: TextStyles.largeBold),
-                  SizedBox(height: MarginDimens.normal),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: progressItems.length,
-                    itemBuilder: (_, index) => _ProgressListItem(
-                      item: progressItems[index],
-                      onTap: () => c.onTapContinue(progressItems[index]),
-                    ),
-                  ),
-                ],
+                // Learning Progress Section
+                _ExpandableSection(
+                  title: 'learning_progress'.tr,
+                  isExpanded: c.isProgressItemsExpanded,
+                  isLoading: c.isLoadingProgressItems,
+                  onToggle: c.loadProgressItems,
+                  child: Obx(() {
+                    if (!c.isProgressItemsExpanded.value) return SizedBox.shrink();
+
+                    if (c.isLoadingProgressItems.value) {
+                      return Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+
+                    if (c.progressItems.isEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Center(
+                          child: Text(
+                            'no_learning_progress'.tr,
+                            style: TextStyles.medium.copyWith(color: Colors.grey),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: c.displayedProgressItems.length,
+                          itemBuilder: (_, index) => _ProgressListItem(
+                            item: c.displayedProgressItems[index],
+                            onTap: () => c.onTapContinue(c.displayedProgressItems[index]),
+                          ),
+                        ),
+
+                        // Toggle button
+                        if (c.hiddenProgressItemsCount > 0) ...[
+                          SizedBox(height: 12),
+                          InkWell(
+                            onTap: c.toggleShowAllProgress,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    c.showAllProgress.value
+                                        ? 'collapse'.tr
+                                        : '${'see_more'.tr} (${c.hiddenProgressItemsCount})',
+                                    style: TextStyles.medium.copyWith(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Icon(
+                                    c.showAllProgress.value
+                                        ? Icons.keyboard_arrow_up
+                                        : Icons.keyboard_arrow_down,
+                                    color: AppColors.primary,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
+                  }),
+                ),
+
+                SizedBox(height: MarginDimens.large),
+
+                // Mock Tests History Section
+                _ExpandableSection(
+                  title: 'mock_test_history'.tr,
+                  isExpanded: c.isMockTestsExpanded,
+                  isLoading: c.isLoadingMockTests,
+                  onToggle: c.loadMockTests,
+                  child: Obx(() {
+                    if (!c.isMockTestsExpanded.value) return SizedBox.shrink();
+
+                    if (c.isLoadingMockTests.value) {
+                      return Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+
+                    if (c.mockTests.isEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Center(
+                          child: Text(
+                            'no_mock_tests'.tr,
+                            style: TextStyles.medium.copyWith(color: Colors.grey),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: c.displayedMockTests.length,
+                          itemBuilder: (_, index) => _MockTestItem(
+                            mockTest: c.displayedMockTests[index],
+                            controller: c,
+                          ),
+                        ),
+
+                        // Toggle button
+                        if (c.hiddenMockTestsCount > 0) ...[
+                          SizedBox(height: 12),
+                          InkWell(
+                            onTap: c.toggleShowAllMockTests,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    c.showAllMockTests.value
+                                        ? 'collapse'.tr
+                                        : '${'see_more'.tr} (${c.hiddenMockTestsCount})',
+                                    style: TextStyles.medium.copyWith(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Icon(
+                                    c.showAllMockTests.value
+                                        ? Icons.keyboard_arrow_up
+                                        : Icons.keyboard_arrow_down,
+                                    color: AppColors.primary,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
+                  }),
+                ),
               ],
             ),
           ),
@@ -544,9 +277,6 @@ class ProgressPage extends StatelessWidget {
     );
   }
 
-  // ============================================
-  // HÀM HIỂN THỊ DIALOG GỢI Ý AI - THÊM MỚI
-  // ============================================
   void _showAISuggestionDialog(BuildContext context, ProgressController c) {
     showDialog(
       context: context,
@@ -557,7 +287,6 @@ class ProgressPage extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: 500, maxHeight: 600),
           padding: EdgeInsets.all(24),
           child: Obx(() {
-            // Loading state
             if (c.isLoadingSuggestion.value) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -565,7 +294,7 @@ class ProgressPage extends StatelessWidget {
                   CircularProgressIndicator(color: Colors.deepPurple),
                   SizedBox(height: 16),
                   Text(
-                    'AI đang phân tích tiến độ của bạn...',
+                    'AI_is_analyzing_your_progress'.tr,
                     style: TextStyles.medium,
                     textAlign: TextAlign.center,
                   ),
@@ -573,29 +302,26 @@ class ProgressPage extends StatelessWidget {
               );
             }
 
-            // Empty state
             if (c.aiSuggestion.value.isEmpty) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.error_outline, size: 64, color: Colors.orange),
                   SizedBox(height: 16),
-                  Text('Chưa có gợi ý', style: TextStyles.largeBold),
+                  Text('no_suggestions_yet'.tr, style: TextStyles.largeBold),
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('Đóng'),
+                    child: Text('close'.tr),
                   ),
                 ],
               );
             }
 
-            // Success state - hiển thị gợi ý
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
                 Row(
                   children: [
                     Container(
@@ -609,7 +335,7 @@ class ProgressPage extends StatelessWidget {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Gợi ý lộ trình học',
+                        'suggested_learning_path'.tr,
                         style: TextStyles.largeBold.copyWith(color: Colors.deepPurple),
                       ),
                     ),
@@ -622,8 +348,6 @@ class ProgressPage extends StatelessWidget {
                 SizedBox(height: 20),
                 Divider(),
                 SizedBox(height: 16),
-
-                // Content
                 Expanded(
                   child: SingleChildScrollView(
                     child: Container(
@@ -641,8 +365,6 @@ class ProgressPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16),
-
-                // Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -653,7 +375,7 @@ class ProgressPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     child: Text(
-                      'Đã hiểu',
+                      'understood'.tr,
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ),
@@ -667,27 +389,110 @@ class ProgressPage extends StatelessWidget {
   }
 }
 
-// ============================================
-// GIỮ NGUYÊN CÁC WIDGET CŨ
-// ============================================
+// Expandable Section Widget
+class _ExpandableSection extends StatelessWidget {
+  final String title;
+  final RxBool isExpanded;
+  final RxBool isLoading;
+  final VoidCallback onToggle;
+  final Widget child;
 
-// Pie Chart Widget
-class _SkillsPieChart extends StatelessWidget {
-  final List<SkillSummary> skills;
-
-  const _SkillsPieChart({required this.skills});
+  const _ExpandableSection({
+    required this.title,
+    required this.isExpanded,
+    required this.isLoading,
+    required this.onToggle,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final colors = [
-      Color(0xFF4285F4), // Blue - Listening
-      Color(0xFF34A853), // Green - Reading
-      Color(0xFFFBBC04), // Yellow - Speaking
-      Color(0xFFEA4335), // Red - Writing
-    ];
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: onToggle,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(16),
+              bottom: Radius.circular(isExpanded.value ? 0 : 16),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyles.largeBold,
+                    ),
+                  ),
+                  Obx(() {
+                    if (isLoading.value) {
+                      return SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      );
+                    }
 
-    final totalScore = skills.fold<int>(0, (sum, skill) => sum + (skill.totalScore ?? 0));
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            isExpanded.value ? 'hide'.tr : 'view'.tr,
+                            style: TextStyles.medium.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(
+                            isExpanded.value
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_right,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
+  }
+}
 
+// Pie Chart Widget
+class _SkillsPieChart extends StatelessWidget {
+  final ProgressController controller;
+
+  const _SkillsPieChart({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -712,15 +517,13 @@ class _SkillsPieChart extends StatelessWidget {
               PieChartData(
                 sectionsSpace: 3,
                 centerSpaceRadius: 60,
-                sections: skills.asMap().entries.map((entry) {
+                sections: controller.skillsSummary.asMap().entries.map((entry) {
                   final index = entry.key;
                   final skill = entry.value;
-                  final percent = totalScore > 0
-                      ? ((skill.totalScore ?? 0) / totalScore * 100).round()
-                      : 0;
+                  final percent = controller.getSkillPercentage(skill);
 
                   return PieChartSectionData(
-                    color: colors[index % colors.length],
+                    color: controller.pieChartColors[index % controller.pieChartColors.length],
                     value: percent > 0 ? percent.toDouble() : 1,
                     title: '$percent%',
                     radius: 65,
@@ -737,12 +540,11 @@ class _SkillsPieChart extends StatelessWidget {
 
           SizedBox(height: 20),
 
-          // Legend
           Wrap(
             spacing: 20,
             runSpacing: 12,
             alignment: WrapAlignment.center,
-            children: skills.asMap().entries.map((entry) {
+            children: controller.skillsSummary.asMap().entries.map((entry) {
               final index = entry.key;
               final skill = entry.value;
               return Row(
@@ -752,13 +554,13 @@ class _SkillsPieChart extends StatelessWidget {
                     width: 16,
                     height: 16,
                     decoration: BoxDecoration(
-                      color: colors[index % colors.length],
+                      color: controller.pieChartColors[index % controller.pieChartColors.length],
                       shape: BoxShape.circle,
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    _getSkillDisplayName(skill.skill ?? ''),
+                    controller.getSkillDisplayName(skill.skill ?? ''),
                     style: TextStyles.small.copyWith(fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -769,28 +571,13 @@ class _SkillsPieChart extends StatelessWidget {
       ),
     );
   }
-
-  String _getSkillDisplayName(String code) {
-    switch (code.toUpperCase()) {
-      case 'LISTENING':
-        return 'Listening';
-      case 'READING':
-        return 'Reading';
-      case 'SPEAKING':
-        return 'Speaking';
-      case 'WRITING':
-        return 'Writing';
-      default:
-        return code;
-    }
-  }
 }
 
-// Thống kê tổng quan
+// Stats Widget
 class _ProgressStats extends StatelessWidget {
-  final ProgressResponseModel data;
+  final ProgressController controller;
 
-  const _ProgressStats({required this.data});
+  const _ProgressStats({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -813,7 +600,7 @@ class _ProgressStats extends StatelessWidget {
             child: _StatItem(
               icon: Icons.assignment_turned_in,
               label: 'attempts'.tr,
-              value: '${data.totalUserAttempts ?? 0}',
+              value: '${controller.totalAttempts}',
               color: Colors.blue,
             ),
           ),
@@ -822,7 +609,7 @@ class _ProgressStats extends StatelessWidget {
             child: _StatItem(
               icon: Icons.stars,
               label: 'score'.tr,
-              value: '${data.totalUserScore ?? 0}',
+              value: '${controller.totalScore}',
               color: Colors.orange,
             ),
           ),
@@ -831,7 +618,7 @@ class _ProgressStats extends StatelessWidget {
             child: _StatItem(
               icon: Icons.timer,
               label: 'study_time'.tr,
-              value: '${((data.studyTime?.total7Days ?? 0) / 60).toStringAsFixed(0)}',
+              value: '${controller.studyTimeInMinutes.toStringAsFixed(0)}',
               color: Colors.green,
             ),
           ),
@@ -894,7 +681,6 @@ class _ProgressListItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Progress Circle
           SizedBox(
             width: 50,
             height: 50,
@@ -920,7 +706,6 @@ class _ProgressListItem extends StatelessWidget {
 
           SizedBox(width: 16),
 
-          // Content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -931,7 +716,7 @@ class _ProgressListItem extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  item.topicTitle ?? '',
+                  item.topicDetails?.title ?? '',
                   style: TextStyles.small.copyWith(color: Colors.grey[600]),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -955,23 +740,174 @@ class _ProgressListItem extends StatelessWidget {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      '${item.totalQuestions}/${item.totalLessons} ${"lesson".tr}',
+                      '${item.totalAttempts?.toStringAsFixed(0) ?? 0} ${'attempts'.tr}',
                       style: TextStyles.small.copyWith(color: Colors.grey[600]),
+                    ),
+                    Spacer(),
+                    Text(
+                      '${item.point ?? 0} ${'score'.tr}',
+                      style: TextStyles.small.copyWith(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
 
-          // Continue Button
-          IconButton(
-            onPressed: onTap,
-            icon: Icon(Icons.arrow_forward_ios, size: 18),
-            color: AppColors.primary,
+// Mock Test Item
+class _MockTestItem extends StatelessWidget {
+  final MockTest mockTest;
+  final ProgressController controller;
+
+  const _MockTestItem({
+    required this.mockTest,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final correctPercent = controller.getMockTestCorrectPercent(mockTest);
+    final formattedDate = controller.formatMockTestDate(mockTest.submittedAt);
+
+    return Container(
+      margin: EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      mockTest.testTitle ?? 'Unknown Test',
+                      style: TextStyles.mediumBold,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      formattedDate,
+                      style: TextStyles.small.copyWith(color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 12),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      '${mockTest.testScore ?? 0}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    Text(
+                      'score'.tr,
+                      style: TextStyles.small.copyWith(color: Colors.orange),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 12),
+          Divider(height: 1),
+          SizedBox(height: 12),
+
+          Row(
+            children: [
+              Expanded(
+                child: _MockTestStat(
+                  icon: Icons.check_circle,
+                  label: 'correct'.tr,
+                  value: '${mockTest.testCorrect ?? 0}',
+                  color: Colors.green,
+                ),
+              ),
+              Container(width: 1, height: 40, color: Colors.grey[300]),
+              Expanded(
+                child: _MockTestStat(
+                  icon: Icons.cancel,
+                  label: 'wrong'.tr,
+                  value: '${mockTest.testIncorrect ?? 0}',
+                  color: Colors.red,
+                ),
+              ),
+              Container(width: 1, height: 40, color: Colors.grey[300]),
+              Expanded(
+                child: _MockTestStat(
+                  icon: Icons.percent,
+                  label: 'exactly'.tr,
+                  value: '$correctPercent%',
+                  color: Colors.blue,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MockTestStat extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  const _MockTestStat({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, color: color, size: 24),
+        SizedBox(height: 4),
+        Text(value, style: TextStyles.mediumBold),
+        Text(
+          label,
+          style: TextStyles.small.copyWith(color: Colors.grey[600]),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

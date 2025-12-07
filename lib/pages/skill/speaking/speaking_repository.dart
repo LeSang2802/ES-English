@@ -15,7 +15,16 @@ class SpeakingRepository {
 
   Future<ContentItemSpeaking> getSpeakingDetail(String contentId) async {
     final Response<dynamic> resp = await _client.get("${ApiPaths.content}/$contentId/detail");
+
+    // ✅ FIX: Lấy item và questions từ response
     final itemData = resp.data['item'] as Map<String, dynamic>;
+    final questionsList = (resp.data['questions'] as List?) ?? [];
+
+    // ✅ FIX: Gộp questions vào itemData trước khi parse
+    itemData['questions'] = questionsList;
+
+    print("📦 Speaking Detail - Item Data: $itemData");
+
     return ContentItemSpeaking.fromJson(itemData);
   }
 

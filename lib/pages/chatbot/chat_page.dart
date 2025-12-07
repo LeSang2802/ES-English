@@ -20,6 +20,37 @@ class _ChatPageState extends State<ChatPage> {
   List<ChatMessage> messages = [];
   bool isTyping = false;
 
+  /// Hàm loại bỏ các ký tự đặc biệt markdown từ text
+  String _cleanMarkdown(String text) {
+    String cleaned = text;
+
+    // Loại bỏ bold markdown (**text** hoặc __text__)
+    cleaned = cleaned.replaceAll(RegExp(r'\*\*(.+?)\*\*'), r'$1');
+    cleaned = cleaned.replaceAll(RegExp(r'__(.+?)__'), r'$1');
+
+    // Loại bỏ italic markdown (*text* hoặc _text_)
+    cleaned = cleaned.replaceAll(RegExp(r'\*(.+?)\*'), r'$1');
+    cleaned = cleaned.replaceAll(RegExp(r'_(.+?)_'), r'$1');
+
+    // Loại bỏ heading markdown (# ## ###)
+    cleaned = cleaned.replaceAll(RegExp(r'^#{1,6}\s+', multiLine: true), '');
+
+    // Loại bỏ code block backticks (```code```)
+    cleaned = cleaned.replaceAll(RegExp(r'```[\s\S]*?```'), '');
+    cleaned = cleaned.replaceAll(RegExp(r'`(.+?)`'), r'$1');
+
+    // Loại bỏ bullet points markdown (- * +)
+    cleaned = cleaned.replaceAll(RegExp(r'^[\*\-\+]\s+', multiLine: true), '• ');
+
+    // Loại bỏ link markdown [text](url)
+    cleaned = cleaned.replaceAll(RegExp(r'\[(.+?)\]\(.+?\)'), r'$1');
+
+    // Loại bỏ các ký tự đặc biệt còn lại
+    cleaned = cleaned.replaceAll(RegExp(r'[~`]'), '');
+
+    return cleaned.trim();
+  }
+
   Future<void> _handleSend(ChatMessage message) async {
     setState(() {
       messages.insert(0, message);
@@ -28,11 +59,13 @@ class _ChatPageState extends State<ChatPage> {
 
     final reply = await _callGeminiAPI(message.text);
 
+    // Clean markdown trước khi hiển thị
+    final cleanedReply = _cleanMarkdown(reply);
+
     final botMessage = ChatMessage(
       user: bot,
       createdAt: DateTime.now(),
-      text: reply,
-      // id: Uuid().v4(),
+      text: cleanedReply,
     );
 
     setState(() {
@@ -47,7 +80,7 @@ class _ChatPageState extends State<ChatPage> {
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey',
     );
 
-    // 🔹 Biến đổi toàn bộ hội thoại thành định dạng Gemini hiểu
+    // Biến đổi toàn bộ hội thoại thành định dạng Gemini hiểu
     final contents = messages.reversed.map((msg) {
       return {
         "role": msg.user.id == "user" ? "user" : "model",
@@ -57,7 +90,7 @@ class _ChatPageState extends State<ChatPage> {
       };
     }).toList();
 
-    // 🔹 Thêm câu hỏi mới vào cuối
+    // Thêm câu hỏi mới vào cuối
     contents.add({
       "role": "user",
       "parts": [
@@ -82,12 +115,11 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ES-GPT", style: TextStyle(color : TextColors.appBar)),
+        title: Text("ES-GPT", style: TextStyle(color: TextColors.appBar)),
         backgroundColor: BgColors.appBar,
       ),
       body: DashChat(
@@ -100,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
           currentUserTextColor: Colors.white,
           containerColor: Color(0xFFE3EDF3),
         ),
-        inputOptions:  InputOptions(
+        inputOptions: InputOptions(
           alwaysShowSend: true,
           inputDecoration: InputDecoration(
             hintText: "enter_message".tr,
@@ -112,4 +144,3 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
-

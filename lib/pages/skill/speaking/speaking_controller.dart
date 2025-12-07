@@ -49,6 +49,13 @@ class SpeakingController extends GetxController {
     super.onClose();
   }
 
+  // Helper method để lấy question_text
+  String getQuestionText() {
+    return question.value?.questions.isNotEmpty == true
+        ? (question.value!.questions.first.question_text ?? '')
+        : '';
+  }
+
   Future<void> initializeSpeech() async {
     isInitializingSpeech.value = true;
     try {
@@ -187,7 +194,6 @@ class SpeakingController extends GetxController {
       return;
     }
 
-    // Tự động gửi để chấm điểm
     await checkAnswer(userTranscript);
   }
 
@@ -216,92 +222,166 @@ class SpeakingController extends GetxController {
     const apiKey = "yourAPIKey";
     final url = Uri.parse(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=$apiKey');
+            // 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$apiKey');
     final level = levelName.toUpperCase();
 
+    // // Lấy question_text từ questions
+    // String questionText = getQuestionText();
+    // if (questionText.isEmpty) {
+    //   questionText = question.value?.body_text ?? '';
+    // }
+
+//     String prompt;
+//     if (level == 'BEGINNER') {
+//       prompt = '''
+// Bạn là giáo viên tiếng Anh. Hãy chấm bài nói của học sinh cấp độ BEGINNER dựa trên văn bản transcript.
+//
+// Câu cần đọc: "$questionText"
+//
+// ${question.value?.media_audio_url != null ? 'Yêu cầu: Đọc lại câu trên một cách chính xác.' : 'Yêu cầu: Đọc lại câu trên một cách chính xác.'}
+//
+// Bài làm của học sinh (transcript từ giọng nói): "$transcript"
+//
+// Tiêu chí chấm (dựa trên text):
+// 1. Từ vựng đơn giản phù hợp (Vocabulary) - 40%
+// 2. Ngữ pháp cơ bản (Grammar) - 30%
+// 3. Nội dung phù hợp với câu cần đọc (Content) - 30%
+//
+// LƯU Ý QUAN TRỌNG:
+// - Đây là bài nói đã chuyển thành text, nên KHÔNG chấm phát âm
+// - Chấm điểm từ 1-10, TUYỆT ĐỐI KHÔNG cho 0 điểm trừ khi hoàn toàn không liên quan
+// - Nếu học sinh cố gắng trả lời, tối thiểu 3-4 điểm
+// - Khích lệ và nhẹ nhàng trong nhận xét
+//
+// Trả về JSON (CHỈ JSON, không thêm text):
+// {
+//   "score": <điểm 1-10, số nguyên>,
+//   "comment": "<nhận xét ngắn gọn bằng tiếng Việt: điểm mạnh, điểm yếu, gợi ý cải thiện>"
+// }
+// ''';
+//     } else if (level == 'INTERMEDIATE') {
+//       prompt = '''
+// Bạn là giáo viên tiếng Anh. Chấm bài nói của học sinh cấp độ INTERMEDIATE dựa trên transcript.
+//
+// Câu cần đọc: "$questionText"
+//
+// ${question.value?.media_audio_url != null ? 'Yêu cầu: Đọc lại câu trên với câu hoàn chỉnh.' : 'Yêu cầu: Trả lời câu hỏi với các câu hoàn chỉnh.'}
+//
+// Bài làm (transcript): "$transcript"
+//
+// Tiêu chí chấm (dựa trên text):
+// 1. Từ vựng đa dạng (Vocabulary range) - 30%
+// 2. Ngữ pháp chính xác (Grammar accuracy) - 30%
+// 3. Độ phong phú câu văn (Sentence variety) - 20%
+// 4. Tính mạch lạc & liên kết (Coherence & Cohesion) - 20%
+//
+// LƯU Ý QUAN TRỌNG:
+// - Đây là transcript từ giọng nói, KHÔNG chấm phát âm
+// - Chấm từ 1-10, cho điểm dựa trên chất lượng nội dung và ngữ pháp
+// - Nếu có cố gắng sử dụng cấu trúc phức tạp, tối thiểu 4-5 điểm
+// - Khích lệ nhưng chỉ ra điểm cần cải thiện rõ ràng
+//
+// Trả về JSON (CHỈ JSON):
+// {
+//   "score": <điểm 1-10>,
+//   "comment": "<nhận xét bằng tiếng Việt: ưu điểm, điểm cần cải thiện, lời khuyên cụ thể>"
+// }
+// ''';
+//     } else {
+//       // ADVANCED
+//       prompt = '''
+// Bạn là giáo viên tiếng Anh chuyên nghiệp. Chấm bài nói cấp độ ADVANCED dựa trên transcript.
+//
+// Câu cần đọc/Chủ đề: "$questionText"
+//
+// Yêu cầu: Trình bày ý kiến trong 1-2 phút với lập luận rõ ràng.
+//
+// Bài làm (transcript): "$transcript"
+//
+// Tiêu chí chấm ( dựa trên text):
+// 1. Từ vựng học thuật, idioms, collocations (Lexical Resource) - 30%
+// 2. Ngữ pháp phức tạp, đa dạng thì và cấu trúc (Grammatical Range) - 30%
+// 3. Mạch lạc, lập luận logic, liên kết tốt (Coherence & Cohesion) - 25%
+// 4. Độ phong phú ý tưởng và triển khai (Content Development) - 15%
+//
+// LƯU Ý QUAN TRỌNG:
+// - Đây là transcript, KHÔNG đánh giá phát âm
+// - Chấm từ 1-10 dựa trên chất lượng ngôn ngữ và nội dung
+// - Cấp độ cao nên yêu cầu strict hơn, nhưng nếu có cố gắng tối thiểu 5 điểm
+// - Nhận xét chuyên sâu, cụ thể từng tiêu chí
+//
+// Trả về JSON (CHỈ JSON):
+// {
+//   "score": <điểm 1-10>,
+//   "comment": "<nhận xét chuyên sâu bằng tiếng Việt: phân tích chi tiết từng tiêu chí, lỗi cụ thể, hướng cải thiện>"
+// }
+// ''';
+//     }
     String prompt;
+    final String questionText = getQuestionText().trim();
+    final bool hasAudio = question.value?.media_audio_url != null;
+
     if (level == 'BEGINNER') {
       prompt = '''
-Bạn là giáo viên tiếng Anh. Hãy chấm bài nói của học sinh cấp độ BEGINNER dựa trên văn bản transcript.
+Bạn là giáo viên tiếng Anh dễ tính chấm bài nói cho học sinh BEGINNER.
 
-Đề bài: ${question.value?.body_text ?? ''}
+Câu cần nói: "$questionText"
+Yêu cầu: ${hasAudio ? 'Đọc lại câu trên' : 'Nói câu trên'}.
 
-${question.value?.media_audio_url != null ? 'Yêu cầu: Đọc lại đoạn văn được cung cấp.' : 'Yêu cầu: Trả lời câu hỏi bằng lời nói.'}
+Bài nói của học sinh: "$transcript"
 
-Bài làm của học sinh (transcript từ giọng nói): "$transcript"
+Chỉ chấm dựa trên text (không chấm phát âm).
+LƯU Ý QUAN TRỌNG: 
+- Transcript này được chuyển đổi TỰ ĐỘNG từ giọng nói, có thể có lỗi chính tả/ngữ pháp do máy nhận dạng sai
+- HÃY CHẤM THEO Ý NGHĨA và phát âm gần đúng, KHÔNG khắt khe về chính tả
+Tiêu chí:
+- Từ vựng đúng & phù hợp: 40%
+- Ngữ pháp cơ bản: 30%
+- Nội dung giống câu gốc: 30%
 
-Tiêu chí chấm (dựa trên text):
-1. Từ vựng đơn giản phù hợp (Vocabulary) - 40%
-2. Ngữ pháp cơ bản (Grammar) - 30%
-3. Nội dung phù hợp với đề bài (Content) - 30%
-
-LƯU Ý QUAN TRỌNG:
-- Đây là bài nói đã chuyển thành text, nên KHÔNG chấm phát âm
-- Chấm điểm từ 1-10, TUYỆT ĐỐI KHÔNG cho 0 điểm trừ khi hoàn toàn không liên quan
-- Nếu học sinh cố gắng trả lời, tối thiểu 3-4 điểm
-- Khích lệ và nhẹ nhàng trong nhận xét
-
-Trả về JSON (CHỈ JSON, không thêm text):
-{
-  "score": <điểm 1-10, số nguyên>,
-  "comment": "<nhận xét ngắn gọn bằng tiếng Việt: điểm mạnh, điểm yếu, gợi ý cải thiện>"
-}
+Trả về đúng JSON, không thêm gì khác:
+{"score": 1-10, "comment": "nhận xét ngắn bằng tiếng Việt, khích lệ, chỉ rõ lỗi nếu có"}
 ''';
-    } else if (level == 'INTERMEDIATE') {
+    }
+    else if (level == 'INTERMEDIATE') {
       prompt = '''
-Bạn là giáo viên tiếng Anh. Chấm bài nói của học sinh cấp độ INTERMEDIATE dựa trên transcript.
+Bạn là giáo viên tiếng Anh dễ tính chấm bài nói INTERMEDIATE.
 
-Đề bài: ${question.value?.body_text ?? ''}
+Câu/câu hỏi: "$questionText"
+Yêu cầu: ${hasAudio ? 'Đọc lại với câu hoàn chỉnh' : 'Trả lời đầy đủ bằng câu hoàn chỉnh'}.
 
-${question.value?.media_audio_url != null ? 'Yêu cầu: Đọc lại đoạn văn với câu hoàn chỉnh.' : 'Yêu cầu: Trả lời câu hỏi với các câu hoàn chỉnh.'}
+Bài nói của học sinh: "$transcript"
 
-Bài làm (transcript): "$transcript"
+LƯU Ý: Transcript từ speech-to-text tự động, có thể có lỗi nhỏ.
+- Chấm theo ý nghĩa và độ tự nhiên của câu
+Chỉ chấm dựa trên text.
+Tiêu chí:
+- Từ vựng đa dạng: 30%
+- Ngữ pháp chính xác: 30%
+- Câu văn phong phú & mạch lạc: 40%
 
-Tiêu chí chấm (dựa trên text):
-1. Từ vựng đa dạng (Vocabulary range) - 30%
-2. Ngữ pháp chính xác (Grammar accuracy) - 30%
-3. Độ phong phú câu văn (Sentence variety) - 20%
-4. Tính mạch lạc & liên kết (Coherence & Cohesion) - 20%
-
-LƯU Ý QUAN TRỌNG:
-- Đây là transcript từ giọng nói, KHÔNG chấm phát âm
-- Chấm từ 1-10, cho điểm dựa trên chất lượng nội dung và ngữ pháp
-- Nếu có cố gắng sử dụng cấu trúc phức tạp, tối thiểu 4-5 điểm
-- Khích lệ nhưng chỉ ra điểm cần cải thiện rõ ràng
-
-Trả về JSON (CHỈ JSON):
-{
-  "score": <điểm 1-10>,
-  "comment": "<nhận xét bằng tiếng Việt: ưu điểm, điểm cần cải thiện, lời khuyên cụ thể>"
-}
+Trả về đúng JSON:
+{"score": 1-10, "comment": "nhận xét tiếng Việt ngắn gọn, có ưu điểm + góp ý cụ thể"}
 ''';
-    } else {
-      // ADVANCED
+    }
+    else { // ADVANCED
       prompt = '''
-Bạn là giáo viên tiếng Anh chuyên nghiệp. Chấm bài nói cấp độ ADVANCED dựa trên transcript.
+Bạn là giáo viên tiếng Anh dễ tính chấm bài nói ADVANCED.
 
-Đề bài: ${question.value?.body_text ?? ''}
+Chủ đề/Câu hỏi: "$questionText"
+Yêu cầu: Trả lời chi tiết, lập luận rõ ràng.
 
-Yêu cầu: Trình bày ý kiến trong 1-2 phút với lập luận rõ ràng.
+Bài nói của học sinh: "$transcript"
+Transcript từ speech-to-text, có thể thiếu dấu câu hoặc nhầm lẫn nhỏ.
+Đánh giá tổng thể nội dung và khả năng diễn đạt
+Chỉ đánh giá nội dung & ngôn ngữ (không chấm phát âm).
+Tiêu chí :
+- Từ vựng đa dạng: 30%
+- Ngữ pháp chính xác: 30%
+- Câu văn phong phú & mạch lạc: 40%
 
-Bài làm (transcript): "$transcript"
-
-Tiêu chí chấm (theo chuẩn IELTS Speaking - dựa trên text):
-1. Từ vựng học thuật, idioms, collocations (Lexical Resource) - 30%
-2. Ngữ pháp phức tạp, đa dạng thì và cấu trúc (Grammatical Range) - 30%
-3. Mạch lạc, lập luận logic, liên kết tốt (Coherence & Cohesion) - 25%
-4. Độ phong phú ý tưởng và triển khai (Content Development) - 15%
-
-LƯU Ý QUAN TRỌNG:
-- Đây là transcript, KHÔNG đánh giá phát âm
-- Chấm từ 1-10 dựa trên chất lượng ngôn ngữ và nội dung
-- Cấp độ cao nên yêu cầu strict hơn, nhưng nếu có cố gắng tối thiểu 5 điểm
-- Nhận xét chuyên sâu, cụ thể từng tiêu chí
-
-Trả về JSON (CHỈ JSON):
-{
-  "score": <điểm 1-10>,
-  "comment": "<nhận xét chuyên sâu bằng tiếng Việt: phân tích chi tiết từng tiêu chí, lỗi cụ thể, hướng cải thiện>"
-}
+Trả về đúng JSON:
+{"score": 1-10, "comment": "nhận xét tiếng Việt ngắn gọn, có ưu điểm + góp ý cụ thể"}
 ''';
     }
 
@@ -317,7 +397,7 @@ Trả về JSON (CHỈ JSON):
         "temperature": level == 'BEGINNER' ? 0.3 : 0.7,
         "topK": 40,
         "topP": 0.95,
-        "maxOutputTokens": 1024,
+        "maxOutputTokens": 512,
       }
     };
 
@@ -355,7 +435,6 @@ Trả về JSON (CHỈ JSON):
           final result = jsonDecode(cleanedText);
           int rawScore = result['score'] is int ? result['score'] : 0;
 
-          // Đảm bảo điểm tối thiểu là 1 (trừ khi AI trả về 0 có chủ đích)
           int finalScore = rawScore == 0 ? 3 : rawScore.clamp(1, 10);
 
           String cleanComment = (result['comment'] ?? "Không có nhận xét")

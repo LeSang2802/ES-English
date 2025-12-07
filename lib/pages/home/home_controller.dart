@@ -14,7 +14,7 @@ class HomeController extends GetxController {
   // final RxInt learnedTodayMin = 0.obs;
   // final RxInt targetMin = DummyUtil.targetMinutes.obs;
   final RxInt learnedThisWeekMin = 0.obs;
-  final RxInt targetWeekMin = 120.obs;
+  final RxInt targetWeekMin = 360.obs;
   final Rx<HomeContinue?> dailyChallenge = Rx<HomeContinue?>(null);
   final Rx<HomeFlashcardSuggestion?> flashcard =
       Rx<HomeFlashcardSuggestion?>(null);

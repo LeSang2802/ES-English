@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:confetti/confetti.dart';
 import '../../../models/skill/writing/content_item_writing_model.dart';
 import '../../../models/skill/writing/writing_submit_request_model.dart';
+import '../../../cores/constants/colors.dart';
+import '../../../cores/constants/text_styles.dart';
 import 'writing_repository.dart';
 
 class WritingController extends GetxController {
@@ -235,7 +238,6 @@ Trả về JSON (CHỈ JSON):
             finalScore = rawScore.clamp(0, 10);
           }
 
-          // Loại bỏ ký tự đặc biệt từ comment
           String cleanComment = (result['comment'] ?? "Không có nhận xét")
               .replaceAll('*', '')
               .replaceAll('**', '')
@@ -248,7 +250,6 @@ Trả về JSON (CHỈ JSON):
           userFeedbacks[currentIndex] = cleanComment;
           hasAnsweredCurrent.value = true;
 
-          // POST ĐIỂM VỀ BACKEND NGAY SAU KHI CHẤM
           await _submitSingleResult(finalScore, cleanComment);
 
           final color = finalScore >= 8
@@ -257,13 +258,13 @@ Trả về JSON (CHỈ JSON):
               ? Colors.orange.shade100
               : Colors.red.shade100;
 
-          Get.snackbar(
-            "Hoàn thành",
-            "Điểm: $finalScore/10 - Đã lưu kết quả!",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: color,
-            duration: const Duration(seconds: 3),
-          );
+          // Get.snackbar(
+          //   "Hoàn thành",
+          //   "Điểm: $finalScore/10 - Đã lưu kết quả!",
+          //   snackPosition: SnackPosition.BOTTOM,
+          //   backgroundColor: color,
+          //   duration: const Duration(seconds: 3),
+          // );
         } catch (e) {
           print("JSON parse error: $e");
           score.value = level == 'BEGINNER' ? 0 : 5;
@@ -293,7 +294,6 @@ Trả về JSON (CHỈ JSON):
     }
   }
 
-  // HÀM MỚI: Post điểm từng câu ngay sau khi chấm
   Future<void> _submitSingleResult(int scoreValue, String feedback) async {
     try {
       final currentContentId = contentIds[currentIndex];
@@ -312,13 +312,193 @@ Trả về JSON (CHỈ JSON):
       print("Single result submitted successfully for content: $currentContentId");
     } catch (e) {
       print("Error submitting single result: $e");
-      // Không hiện snackbar lỗi ở đây để không làm gián đoạn trải nghiệm người dùng
-      // Lỗi đã được log, có thể xử lý sau nếu cần
     }
   }
 
-  // CẬP NHẬT: Hàm này giờ chỉ dùng để back về màn hình trước
+  // Tính toán thống kê
+  int get totalQuestions => contentIds.length;
+  int get totalScore => userScores.fold(0, (sum, score) => sum + score);
+  int get maxPossibleScore => totalQuestions * 10;
+  double get percentage => maxPossibleScore > 0 ? (totalScore / maxPossibleScore) * 100 : 0;
+
+  // Đếm số câu đúng (điểm = 10) và sai (điểm = 0)
+  int get correctCount => userScores.where((s) => s == 10).length;
+  int get wrongCount => userScores.where((s) => s == 0).length;
+
+  // Hiển thị dialog kết quả
+  void _showResultDialog() {
+    final level = levelName.toUpperCase();
+    final totalScoreValue = totalScore;
+    final maxScore = maxPossibleScore;
+    final percentageValue = percentage;
+
+    String advice;
+    if (percentageValue <= 30) {
+      advice = 'percentage_30'.tr;
+    } else if (percentageValue <= 60) {
+      advice ='percentage_60'.tr;
+    } else if (percentageValue <= 80) {
+      advice = 'percentage_80'.tr;
+    } else {
+      advice = 'percentage_writing'.tr;
+    }
+
+    // Tạo confetti controller
+    final confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    confettiController.play();
+
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async {
+          confettiController.dispose();
+          return true;
+        },
+        child: Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Hình ảnh chúc mừng với pháo hoa
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/congra.png',
+                      height: 80,
+                    ),
+                    ConfettiWidget(
+                      confettiController: confettiController,
+                      blastDirectionality: BlastDirectionality.explosive,
+                      emissionFrequency: 0.05,
+                      numberOfParticles: 30,
+                      gravity: 0.3,
+                      shouldLoop: false,
+                      maxBlastForce: 15,
+                      minBlastForce: 8,
+                      colors: const [
+                        Colors.red,
+                        Colors.blue,
+                        Colors.green,
+                        Colors.yellow,
+                        Colors.purple,
+                        Colors.orange,
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'theme_complete'.tr,
+                  style: TextStyles.largeBold.copyWith(fontSize: 24),
+                ),
+                const SizedBox(height: 20),
+
+                // Hiển thị điểm theo level
+                if (level == 'BEGINNER' && totalQuestions > 1) ...[
+                  Text(
+                    '$totalScoreValue/$maxScore ${'score'.tr}',
+                    style: TextStyles.largeBold.copyWith(
+                      fontSize: 48,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ] else ...[
+                  Text(
+                    '$totalScoreValue/10 ${'score'.tr}',
+                    style: TextStyles.largeBold.copyWith(
+                      fontSize: 48,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: 20),
+
+                // Thống kê đúng/sai cho BEGINNER nhiều câu
+                if (level == 'BEGINNER' && totalQuestions > 1)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text('correct'.tr, style: TextStyles.medium),
+                          Text(
+                            '$correctCount',
+                            style: TextStyles.largeBold.copyWith(
+                              color: Colors.green,
+                              fontSize: 28,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text('wrong'.tr, style: TextStyles.medium),
+                          Text(
+                            '$wrongCount',
+                            style: TextStyles.largeBold.copyWith(
+                              color: Colors.red,
+                              fontSize: 28,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                if (level == 'BEGINNER' && totalQuestions > 1)
+                  const SizedBox(height: 20),
+
+                // Lời khuyên
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    advice,
+                    textAlign: TextAlign.center,
+                    style: TextStyles.mediumBold.copyWith(
+                      color: AppColors.textDark,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Nút quay lại
+                ElevatedButton(
+                  onPressed: () {
+                    confettiController.dispose();
+                    Get.back(); // đóng dialog
+                    Get.back(); // về màn trước
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 50,
+                      vertical: 16,
+                    ),
+                  ),
+                  child: Text(
+                    'come_back'.tr,
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  // Hàm kết thúc topic - hiển thị dialog
   Future<void> finishTopic() async {
-    Get.back();
+    _showResultDialog();
   }
 }

@@ -17,11 +17,11 @@ class TestPage extends GetView<TestController> {
     return BasePage(
       isLoading: controller.isLoading,
       isNestedScroll: false,
-      appBar: BaseAppBar(title: "Test"),
+      appBar: BaseAppBar(title: 'test'.tr),
       body: Obx(() {
         final items = controller.tests.toList();
         if (items.isEmpty) {
-          return Center(child: Text('Chọn đề thi:'));
+          return Center(child: Text('choose_exam'.tr));
         }
         return RefreshLoadMoreWidget<TestResponseModel>(
           items: items,
@@ -61,7 +61,7 @@ class TestPage extends GetView<TestController> {
             ),
             child: Center(
               child: Text(
-                'Đề ${index + 1}:',
+                '${'exam'.tr} ${index + 1}:',
                 style: TextStyles.mediumBold.copyWith(
                   color: AppColors.primary,
                   fontSize: 14,
@@ -77,7 +77,7 @@ class TestPage extends GetView<TestController> {
                 Text(test.title ?? '-', style: TextStyles.mediumBold),
                 SizedBox(height: MarginDimens.small),
                 Text(
-                  '${test.durationMinutes ?? 0} phút',
+                  '${'time'.tr}: ${test.durationMinutes ?? 0} ${'min'.tr}',
                   style: TextStyles.medium.copyWith(color: Colors.grey),
                 ),
               ],
